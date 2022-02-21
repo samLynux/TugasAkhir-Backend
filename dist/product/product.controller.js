@@ -23,7 +23,7 @@ let ProductController = class ProductController {
         this.productService = productService;
     }
     async all(page = 1) {
-        return this.productService.paginate();
+        return this.productService.paginate(page);
     }
     async create(body) {
         return this.productService.create(body);

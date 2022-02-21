@@ -10,7 +10,7 @@ async function bootstrap() {
     app.useGlobalPipes(new common_1.ValidationPipe());
     app.use(cookieParser());
     app.enableCors({
-        origin: 'http://localhost: 3000',
+        origin: 'http://localhost:3000',
         credentials: true
     });
     await app.listen(3000);

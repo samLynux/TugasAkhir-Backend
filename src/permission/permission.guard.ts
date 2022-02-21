@@ -33,6 +33,6 @@ export class PermissionGuard implements CanActivate {
       return role.permissions.some(p => (p.name === `view_${access}`) || (p.name === `edit_${access}`));
     }
 
-    return role.permissions.some(p => p.name === access);
+    return role.permissions.some(p => p.name ===  `edit_${access}`);
   }
 }
