@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const auth_guard_1 = require("../auth/auth.guard");
 const order_service_1 = require("./order.service");
 const json2csv_1 = require("json2csv");
-const has_permission_decorator_1 = require("../permission/has-permission.decorator");
 let OrderController = class OrderController {
     constructor(orderService) {
         this.orderService = orderService;
@@ -62,7 +61,6 @@ let OrderController = class OrderController {
 };
 __decorate([
     (0, common_1.Get)('orders'),
-    (0, has_permission_decorator_1.HasPemission)('orders'),
     __param(0, (0, common_1.Query)('page')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -70,7 +68,6 @@ __decorate([
 ], OrderController.prototype, "all", null);
 __decorate([
     (0, common_1.Post)('export'),
-    (0, has_permission_decorator_1.HasPemission)('orders'),
     __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -78,7 +75,6 @@ __decorate([
 ], OrderController.prototype, "export", null);
 __decorate([
     (0, common_1.Get)('chart'),
-    (0, has_permission_decorator_1.HasPemission)('orders'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

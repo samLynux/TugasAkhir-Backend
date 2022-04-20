@@ -14,4 +14,5 @@ export declare class AuthController {
     logout(response: Response): Promise<{
         message: string;
     }>;
+    test(): Promise<string>;
 }

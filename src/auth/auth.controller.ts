@@ -32,7 +32,6 @@ export class AuthController {
             lastname : body.lastname,
             email : body.email,
             password : hashed,
-            role: {id:2}
         });
     }
 
@@ -76,5 +75,11 @@ export class AuthController {
         return {
             message: "success"
         }
+    }
+
+    @Get('test')
+    async test(){
+
+        return "ok";
     }
 }

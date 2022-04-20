@@ -8,7 +8,6 @@ import { UserUpdateDTO } from 'src/auth/models/user-update.dto';
 import { PaginatedResult } from 'src/common/paginate-result.interface';
 import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express';
-import { HasPemission } from 'src/permission/has-permission.decorator';
 
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -23,29 +22,25 @@ export class UserController {
     }
 
     @Get() 
-    @HasPemission('users')
     async all(@Query('page') page: number = 1){
-        return await this.userService.paginate(page, ['role']);
+        return await this.userService.paginate(page);
     }
 
     @Post()
-    @HasPemission('users')
     async create(@Body() body: UserCreateDTO): Promise<User>{
         const password = await bcrypt.hash('1234',12)
 
-        const {role_id, ...data} = body;
+        const { ...data} = body;
 
         return this.userService.create({
             ...data,
             password,
-            role: {id: role_id}
         });
     }
 
     @Get(':id')
-    @HasPemission('users')
     async get(@Param('id') id: number){
-        return this.userService.findOne({id}, ['role']);
+        return this.userService.findOne({id});
     }
 
     @Put('info')
@@ -78,24 +73,21 @@ export class UserController {
 
 
     @Put(':id')
-    @HasPemission('users')
     async update(
         @Param('id') id : number,
         @Body() body: UserUpdateDTO
 
     ){
 
-        const {role_id, ...data} = body;
+        const { ...data} = body;
         await this.userService.update(id, {
             ...data,
-            role: {id: role_id}
         })
 
         return this.userService.findOne(id);
     }
 
     @Delete(':id')
-    @HasPemission('users')
     async delete(@Param('id') id : number){
         return this.userService.delete(id);
     }

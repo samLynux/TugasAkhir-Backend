@@ -14,7 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RoleController = void 0;
 const common_1 = require("@nestjs/common");
-const has_permission_decorator_1 = require("../permission/has-permission.decorator");
+const has_permission_decorator_1 = require("src/permission/has-permission.decorator");
 const role_service_1 = require("./role.service");
 let RoleController = class RoleController {
     constructor(roleService) {

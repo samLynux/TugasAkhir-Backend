@@ -9,5 +9,4 @@ export class UserUpdateDTO{
     email?:string;
     
 
-    role_id?:number
 }

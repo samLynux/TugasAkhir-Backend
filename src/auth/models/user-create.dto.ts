@@ -11,7 +11,5 @@ export class UserCreateDTO{
     @IsEmail()
     email:string;
 
-    @IsNotEmpty()
-    role_id:number;
     
 }

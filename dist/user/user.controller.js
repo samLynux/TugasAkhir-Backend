@@ -31,22 +31,21 @@ const user_create_dto_1 = require("../auth/models/user-create.dto");
 const auth_guard_1 = require("../auth/auth.guard");
 const user_update_dto_1 = require("../auth/models/user-update.dto");
 const auth_service_1 = require("../auth/auth.service");
-const has_permission_decorator_1 = require("../permission/has-permission.decorator");
 let UserController = class UserController {
     constructor(userService, authService) {
         this.userService = userService;
         this.authService = authService;
     }
     async all(page = 1) {
-        return await this.userService.paginate(page, ['role']);
+        return await this.userService.paginate(page);
     }
     async create(body) {
         const password = await bcrypt.hash('1234', 12);
-        const { role_id } = body, data = __rest(body, ["role_id"]);
-        return this.userService.create(Object.assign(Object.assign({}, data), { password, role: { id: role_id } }));
+        const data = __rest(body, []);
+        return this.userService.create(Object.assign(Object.assign({}, data), { password }));
     }
     async get(id) {
-        return this.userService.findOne({ id }, ['role']);
+        return this.userService.findOne({ id });
     }
     async updateInfo(request, body) {
         const id = await this.authService.userId(request);
@@ -65,8 +64,8 @@ let UserController = class UserController {
         return this.userService.findOne(id);
     }
     async update(id, body) {
-        const { role_id } = body, data = __rest(body, ["role_id"]);
-        await this.userService.update(id, Object.assign(Object.assign({}, data), { role: { id: role_id } }));
+        const data = __rest(body, []);
+        await this.userService.update(id, Object.assign({}, data));
         return this.userService.findOne(id);
     }
     async delete(id) {
@@ -75,7 +74,6 @@ let UserController = class UserController {
 };
 __decorate([
     (0, common_1.Get)(),
-    (0, has_permission_decorator_1.HasPemission)('users'),
     __param(0, (0, common_1.Query)('page')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -83,7 +81,6 @@ __decorate([
 ], UserController.prototype, "all", null);
 __decorate([
     (0, common_1.Post)(),
-    (0, has_permission_decorator_1.HasPemission)('users'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_create_dto_1.UserCreateDTO]),
@@ -91,7 +88,6 @@ __decorate([
 ], UserController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, has_permission_decorator_1.HasPemission)('users'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -116,7 +112,6 @@ __decorate([
 ], UserController.prototype, "updatePassword", null);
 __decorate([
     (0, common_1.Put)(':id'),
-    (0, has_permission_decorator_1.HasPemission)('users'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -125,7 +120,6 @@ __decorate([
 ], UserController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, has_permission_decorator_1.HasPemission)('users'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),

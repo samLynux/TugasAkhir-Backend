@@ -36,7 +36,6 @@ let AuthController = class AuthController {
             lastname: body.lastname,
             email: body.email,
             password: hashed,
-            role: { id: 2 }
         });
     }
     async login(email, password, response) {
@@ -60,6 +59,9 @@ let AuthController = class AuthController {
         return {
             message: "success"
         };
+    }
+    async test() {
+        return "ok";
     }
 };
 __decorate([
@@ -94,6 +96,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logout", null);
+__decorate([
+    (0, common_1.Get)('test'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "test", null);
 AuthController = __decorate([
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.Controller)(),
