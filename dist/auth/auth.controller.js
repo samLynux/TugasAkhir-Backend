@@ -34,6 +34,7 @@ let AuthController = class AuthController {
         return this.userService.create({
             firstname: body.firstname,
             lastname: body.lastname,
+            image: "http://localhost:3000/api/default_image/default_user.png",
             email: body.email,
             password: hashed,
         });

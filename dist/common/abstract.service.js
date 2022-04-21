@@ -19,12 +19,13 @@ let AbstractService = class AbstractService {
     async all(relations = []) {
         return this.repository.find({ relations });
     }
-    async paginate(page = 1, relations = []) {
+    async paginate(page = 1, relations = [], where = null) {
         const take = 15;
         const [data, total] = await this.repository.findAndCount({
             take,
             skip: (page - 1) * take,
-            relations
+            relations,
+            where
         });
         return {
             data: data,

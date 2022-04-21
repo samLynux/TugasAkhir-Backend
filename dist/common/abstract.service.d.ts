@@ -4,7 +4,7 @@ export declare abstract class AbstractService {
     protected readonly repository: Repository<any>;
     protected constructor(repository: Repository<any>);
     all(relations?: any[]): Promise<any[]>;
-    paginate(page?: number, relations?: any[]): Promise<PaginatedResult>;
+    paginate(page?: number, relations?: any[], where?: any): Promise<PaginatedResult>;
     create(data: any): Promise<any>;
     findOne(condition: any, relations?: any[]): Promise<any>;
     update(id: number, data: any): Promise<any>;

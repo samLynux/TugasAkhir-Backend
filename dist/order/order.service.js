@@ -23,13 +23,11 @@ let OrderService = class OrderService extends abstract_service_1.AbstractService
         super(orderRepository);
         this.orderRepository = orderRepository;
     }
-    async paginate(page = 1, relations = []) {
-        const { data, meta } = await super.paginate(page, relations);
+    async paginate(page = 1, relations = [], where) {
+        const { data, meta } = await super.paginate(page, relations, where);
         return {
             data: data.map((order) => ({
                 id: order.id,
-                name: order.name,
-                email: order.email,
                 total: order.total,
                 created_at: order.createdAt,
                 order_items: order.order_items
@@ -42,6 +40,9 @@ let OrderService = class OrderService extends abstract_service_1.AbstractService
             FROM orders o 
             JOIN order_items i on o.id = i.order_id
             GROUP BY date`);
+    }
+    async find(id) {
+        return this.orderRepository.find();
     }
 };
 OrderService = __decorate([

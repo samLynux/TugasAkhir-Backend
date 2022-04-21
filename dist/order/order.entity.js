@@ -11,14 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Order = void 0;
 const class_transformer_1 = require("class-transformer");
+const user_entity_1 = require("../user/models/user.entity");
 const typeorm_1 = require("typeorm");
 const order_item_entity_1 = require("./order-item.entity");
 let Order = class Order {
     get name() {
-        return `${this.first_name} ${this.last_name}`;
-    }
-    get total() {
-        return this.order_items.reduce((sum, i) => sum + i.quantity * i.price, 0);
+        return `${this.user.firstname} ${this.user.lastname}`;
     }
 };
 __decorate([
@@ -26,19 +24,13 @@ __decorate([
     __metadata("design:type", Number)
 ], Order.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    (0, class_transformer_1.Exclude)(),
-    __metadata("design:type", String)
-], Order.prototype, "first_name", void 0);
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User),
+    __metadata("design:type", user_entity_1.User)
+], Order.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    (0, class_transformer_1.Exclude)(),
-    __metadata("design:type", String)
-], Order.prototype, "last_name", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Order.prototype, "email", void 0);
+    __metadata("design:type", Number)
+], Order.prototype, "total", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", String)
@@ -52,11 +44,6 @@ __decorate([
     __metadata("design:type", String),
     __metadata("design:paramtypes", [])
 ], Order.prototype, "name", null);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", Number),
-    __metadata("design:paramtypes", [])
-], Order.prototype, "total", null);
 Order = __decorate([
     (0, typeorm_1.Entity)('orders')
 ], Order);

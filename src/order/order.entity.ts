@@ -1,5 +1,6 @@
 import { Exclude, Expose } from "class-transformer";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user/models/user.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrderItem } from "./order-item.entity";
 
 
@@ -9,17 +10,15 @@ export class Order{
     @PrimaryGeneratedColumn()
     id:number;
     
-    @Column()
-    @Exclude()
-    first_name:string;
+   
+    
+    @ManyToOne(() => User)
+    user:User;
 
     @Column()
-    @Exclude()
-    last_name:string;
-
-    @Column()
-    email:string;
-
+    total: number;
+    
+    
     @CreateDateColumn()
     createdAt:string;
 
@@ -29,11 +28,8 @@ export class Order{
 
     @Expose()
     get name():string{
-        return `${this.first_name} ${this.last_name}`;
+        return `${this.user.firstname} ${this.user.lastname}`;
     }
 
-    @Expose()
-    get total():number{
-        return this.order_items.reduce((sum, i) => sum + i.quantity * i.price,0);
-    }
+    
 }

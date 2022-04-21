@@ -14,4 +14,16 @@ export class Product{
     image:string;
     @Column()
     price:number;
+
+
+    @Column()
+    category:string;
+    @Column()
+    size:string;
+    @Column()
+    brand:string;
+    @Column()
+    primaryColor:string;
+    @Column()
+    secondaryColor:string;
 }

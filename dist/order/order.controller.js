@@ -16,44 +16,29 @@ exports.OrderController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_guard_1 = require("../auth/auth.guard");
 const order_service_1 = require("./order.service");
-const json2csv_1 = require("json2csv");
+const order_items_service_1 = require("./order-items.service");
+const auth_service_1 = require("../auth/auth.service");
+const order_entity_create_dto_1 = require("./order.entity.create.dto");
 let OrderController = class OrderController {
-    constructor(orderService) {
+    constructor(orderService, orderItemsService, authService) {
         this.orderService = orderService;
+        this.orderItemsService = orderItemsService;
+        this.authService = authService;
     }
-    async all(page = 1) {
-        return this.orderService.paginate(page, ['order_items']);
+    async all(page = 1, request) {
+        const id = await this.authService.userId(request);
+        return this.orderService.paginate(page, ['order_items',], {
+            user: { id: id },
+        });
     }
-    async export(res) {
-        const parser = new json2csv_1.Parser({
-            fields: ['ID', 'Name', 'Email', 'Product Title', 'Price', 'Quantity']
+    async create(body, request) {
+        const id = await this.authService.userId(request);
+        const items = await this.orderItemsService.create(body.order_items);
+        return this.orderService.create({
+            user: id,
+            order_items: items,
+            total: body.total
         });
-        const orders = await this.orderService.all(['order_items']);
-        const json = [];
-        orders.forEach((o) => {
-            json.push({
-                ID: o.id,
-                Name: o.name,
-                Email: o.email,
-                'Product Title': '',
-                Price: '',
-                Quantity: ''
-            });
-            o.order_items.forEach((i) => {
-                json.push({
-                    ID: '',
-                    Name: '',
-                    Email: '',
-                    'Product Title': i.product_title,
-                    Price: i.price,
-                    Quantity: i.quantity
-                });
-            });
-        });
-        const csv = parser.parse(json);
-        res.header('Content-Type', 'test/csv');
-        res.attachment('orders.csv');
-        return res.send(csv);
     }
     async chart() {
         return this.orderService.chart();
@@ -61,18 +46,22 @@ let OrderController = class OrderController {
 };
 __decorate([
     (0, common_1.Get)('orders'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Query)('page')),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "all", null);
 __decorate([
-    (0, common_1.Post)('export'),
-    __param(0, (0, common_1.Res)()),
+    (0, common_1.Post)('orders'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [order_entity_create_dto_1.OrderCreateDTO, Object]),
     __metadata("design:returntype", Promise)
-], OrderController.prototype, "export", null);
+], OrderController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)('chart'),
     __metadata("design:type", Function),
@@ -83,7 +72,9 @@ OrderController = __decorate([
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [order_service_1.OrderService])
+    __metadata("design:paramtypes", [order_service_1.OrderService,
+        order_items_service_1.OrderItemsService,
+        auth_service_1.AuthService])
 ], OrderController);
 exports.OrderController = OrderController;
 //# sourceMappingURL=order.controller.js.map

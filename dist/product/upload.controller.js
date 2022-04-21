@@ -26,6 +26,9 @@ let UploadController = class UploadController {
     async getImage(path, res) {
         res.sendFile(path, { root: 'uploads' });
     }
+    async getDefaultImage(path, res) {
+        res.sendFile(path, { root: 'uploads/default' });
+    }
 };
 __decorate([
     (0, common_1.Post)('upload'),
@@ -51,6 +54,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UploadController.prototype, "getImage", null);
+__decorate([
+    (0, common_1.Get)('default_image/:path'),
+    __param(0, (0, common_1.Param)('path')),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UploadController.prototype, "getDefaultImage", null);
 UploadController = __decorate([
     (0, common_1.Controller)()
 ], UploadController);

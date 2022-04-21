@@ -13,6 +13,9 @@ exports.ProductCreateDTO = void 0;
 const class_validator_1 = require("class-validator");
 const typeorm_1 = require("typeorm");
 let ProductCreateDTO = class ProductCreateDTO {
+    constructor() {
+        this.image = "http://localhost:3000/api/default_image/default_product.png";
+    }
 };
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
@@ -23,7 +26,7 @@ __decorate([
     __metadata("design:type", String)
 ], ProductCreateDTO.prototype, "description", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], ProductCreateDTO.prototype, "image", void 0);
 __decorate([

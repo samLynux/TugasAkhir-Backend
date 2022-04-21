@@ -1,9 +1,14 @@
 import { OrderService } from './order.service';
-import { Response } from 'express';
+import { Request } from 'express';
+import { OrderItemsService } from './order-items.service';
+import { AuthService } from 'src/auth/auth.service';
+import { OrderCreateDTO } from './order.entity.create.dto';
 export declare class OrderController {
     private orderService;
-    constructor(orderService: OrderService);
-    all(page?: number): Promise<import("../common/paginate-result.interface").PaginatedResult>;
-    export(res: Response): Promise<Response<any, Record<string, any>>>;
+    private orderItemsService;
+    private authService;
+    constructor(orderService: OrderService, orderItemsService: OrderItemsService, authService: AuthService);
+    all(page: number, request: Request): Promise<import("../common/paginate-result.interface").PaginatedResult>;
+    create(body: OrderCreateDTO, request: Request): Promise<any>;
     chart(): Promise<any>;
 }

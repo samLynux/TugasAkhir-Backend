@@ -48,6 +48,7 @@ __decorate([
 ], ProductController.prototype, "all", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [product_create_dto_1.ProductCreateDTO]),

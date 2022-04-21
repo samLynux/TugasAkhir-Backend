@@ -4,4 +4,5 @@ export declare class UploadController {
         url: string;
     };
     getImage(path: any, res: Response): Promise<void>;
+    getDefaultImage(path: any, res: Response): Promise<void>;
 }

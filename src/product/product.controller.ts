@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ProductCreateDTO } from './models/product-create.dto';
 import { ProductUpdateDTO } from './models/product-update.dto';
@@ -16,7 +16,9 @@ export class ProductController {
     }
 
     @Post()
+    @UsePipes(new ValidationPipe({ transform: true }))
     async create(@Body() body: ProductCreateDTO){
+        
         return this.productService.create(body);
     }
 

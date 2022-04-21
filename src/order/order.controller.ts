@@ -1,61 +1,49 @@
-import { ClassSerializerInterceptor, Controller, Get, Post,Res, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Get, Post,Res, Query, UseGuards, UseInterceptors, Body, Req } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { OrderService } from './order.service';
-import { Response } from 'express';
-import { Parser } from 'json2csv';
-import { Order } from './order.entity';
-import { OrderItem } from './order-item.entity';
+import { Request, Response } from 'express';
+import { OrderItemsService } from './order-items.service';
+import { AuthService } from 'src/auth/auth.service';
+import { OrderCreateDTO } from './order.entity.create.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
 @Controller()
 export class OrderController {
-    constructor(private orderService:OrderService){
+    constructor(
+        private orderService:OrderService,
+        private orderItemsService: OrderItemsService,
+        private authService: AuthService,
+        ){
 
     }
 
 
     @Get('orders')
-    async all(@Query('page')page: number = 1){
-        return this.orderService.paginate(page, ['order_items']);
-    }
-
-    @Post('export')
-    async export(@Res() res:Response){
-        const parser = new Parser({
-            fields: ['ID', 'Name', 'Email', 'Product Title', 'Price', 'Quantity']
-        })
-
-        const orders = await this.orderService.all(['order_items'])
-
-        const json = [];
-        orders.forEach((o : Order) =>{
-            json.push({
-                ID: o.id,
-                Name: o.name,
-                Email: o.email,
-                'Product Title': '',
-                Price: '',
-                Quantity :''
-            });
-            o.order_items.forEach((i: OrderItem) => {
-                json.push({
-                    ID: '',
-                    Name: '',
-                    Email: '',
-                    'Product Title': i.product_title,
-                    Price: i.price,
-                    Quantity :i.quantity
-                });
-            });
+    @UseGuards(AuthGuard)
+    async all(@Query('page')page: number = 1, @Req() request: Request){
+        const id = await this.authService.userId(request);
+        // return this.orderService.find(id)
+        return this.orderService.paginate(page, ['order_items',], {
+            user: { id: id},
         });
-
-        const csv = parser.parse(json);
-
-        res.header('Content-Type','test/csv');
-        res.attachment('orders.csv');
-        return res.send(csv);
     }
+
+    @Post('orders')
+    @UseGuards(AuthGuard)
+    async create(@Body() body: OrderCreateDTO, @Req() request: Request){
+        const id = await this.authService.userId(request);
+ 
+        const items = await this.orderItemsService.create(body.order_items);
+
+        return this.orderService.create({
+            user: id,
+            order_items: items,
+            total: body.total
+        });
+    }
+
+   
 
     @Get('chart')
     async chart(){

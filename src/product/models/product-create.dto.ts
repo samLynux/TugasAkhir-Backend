@@ -1,4 +1,5 @@
 import { IsNotEmpty } from "class-validator";
+import { type } from "os";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
@@ -9,8 +10,16 @@ export class ProductCreateDTO{
     title: string;
     @IsNotEmpty()
     description:string;
-    @IsNotEmpty()
-    image:string;
+    
+    @Column( )
+    image:string = "http://localhost:3000/api/default_image/default_product.png";
     @IsNotEmpty()
     price:number;
+
+    
+    category?:string;
+    size?:string;
+    brand?:string;
+    primaryColor?:string;
+    secondaryColor?:string;
 }

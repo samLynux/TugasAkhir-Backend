@@ -12,6 +12,9 @@ export class User{
     @Column()
     lastname: string;
 
+    @Column()
+    image: string;
+
     @Column({unique: true})
     email:string;
 

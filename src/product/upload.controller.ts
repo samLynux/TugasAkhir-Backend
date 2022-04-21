@@ -31,4 +31,12 @@ export class UploadController {
     {
         res.sendFile(path, {root: 'uploads'});
     }
+
+    @Get('default_image/:path')
+    async getDefaultImage(
+        @Param('path') path, 
+        @Res() res: Response )
+    {
+        res.sendFile(path, {root: 'uploads/default'});
+    }
 }

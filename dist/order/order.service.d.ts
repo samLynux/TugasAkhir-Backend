@@ -5,6 +5,7 @@ import { Order } from './order.entity';
 export declare class OrderService extends AbstractService {
     private readonly orderRepository;
     constructor(orderRepository: Repository<Order>);
-    paginate(page?: number, relations?: any[]): Promise<PaginatedResult>;
+    paginate(page: number, relations: any[], where: any): Promise<PaginatedResult>;
     chart(): Promise<any>;
+    find(id: number): Promise<Order[]>;
 }
