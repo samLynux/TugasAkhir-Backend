@@ -23,7 +23,8 @@ ProductModule = __decorate([
             common_module_1.CommonModule
         ],
         controllers: [product_controller_1.ProductController, upload_controller_1.UploadController],
-        providers: [product_service_1.ProductService]
+        providers: [product_service_1.ProductService],
+        exports: [product_service_1.ProductService]
     })
 ], ProductModule);
 exports.ProductModule = ProductModule;

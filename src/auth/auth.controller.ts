@@ -27,13 +27,15 @@ export class AuthController {
             throw new BadRequestException('Passwords does not match');
         }
         const hashed = await bcrypt.hash(body.password,12);
-        return this.userService.create({
-            firstname : body.firstname,
-            lastname : body.lastname,
+        const user = await this.userService.create({
             image: "http://localhost:3000/api/default_image/default_user.png",
             email : body.email,
             password : hashed,
         });
+
+        this.userService.createPreference(user);
+
+        return user
     }
 
     @Post('login')

@@ -29,10 +29,12 @@ const typeorm_1 = require("@nestjs/typeorm");
 const abstract_service_1 = require("../common/abstract.service");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./models/user.entity");
+const user_preferences_service_1 = require("./user-preferences.service");
 let UserService = class UserService extends abstract_service_1.AbstractService {
-    constructor(userRepository) {
+    constructor(userRepository, userPrefService) {
         super(userRepository);
         this.userRepository = userRepository;
+        this.userPrefService = userPrefService;
     }
     async paginate(page = 1, relations = []) {
         const { data, meta } = await super.paginate(page, relations);
@@ -44,11 +46,17 @@ let UserService = class UserService extends abstract_service_1.AbstractService {
             meta
         };
     }
+    async createPreference(user) {
+        await this.userPrefService.create({
+            user: user,
+        });
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        user_preferences_service_1.UserPreferencesService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

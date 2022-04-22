@@ -11,4 +11,12 @@ export class ProductService extends AbstractService{
     ){
         super(productRepository);
     }
+
+    async find(ids: number[]):Promise<any>{
+        
+        return  this.productRepository.createQueryBuilder()
+        .where("id IN (:...ids)",  {id: ids});
+       
+        // return this.repository.fin d(condition);
+    }
 }

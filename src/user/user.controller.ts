@@ -8,6 +8,8 @@ import { UserUpdateDTO } from 'src/auth/models/user-update.dto';
 import { PaginatedResult } from 'src/common/paginate-result.interface';
 import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express';
+import { UserPreferencesService } from './user-preferences.service';
+import { UserPreference } from './models/user-preferences.entity';
 
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -16,6 +18,7 @@ import { Request } from 'express';
 export class UserController {
     constructor(
         private userService: UserService,
+        private userPrefService: UserPreferencesService,
         private authService: AuthService
         ){
 
@@ -40,7 +43,7 @@ export class UserController {
 
     @Get(':id')
     async get(@Param('id') id: number){
-        return this.userService.findOne({id});
+        return this.userPrefService.findOne({user: id}, ["user", "favourites"]);
     }
 
     @Put('info')
@@ -85,6 +88,31 @@ export class UserController {
         })
 
         return this.userService.findOne(id);
+    }
+
+    @Put('pref/edit')
+    async updatePref(
+        @Body() body: UserPreference,
+        @Req() request: Request
+    ){
+        const id = await this.authService.userId(request);
+        const prefId: any = this.userPrefService.findIdByUserId(id)
+        const { ...data} = body;
+        
+        await this.userPrefService.update(prefId, {
+            ...data,
+        })
+
+        return this.userPrefService.findOne({user: id}, ["user", "favourites"]);
+    }
+
+    @Put('favourite/add')
+    async addFav(
+        @Body("favourites") ids: number[],
+        @Req() request: Request
+    ){
+        const id = await this.authService.userId(request);
+        return this.userPrefService.addFav(id, ids)
     }
 
     @Delete(':id')

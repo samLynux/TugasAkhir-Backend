@@ -31,9 +31,12 @@ const user_create_dto_1 = require("../auth/models/user-create.dto");
 const auth_guard_1 = require("../auth/auth.guard");
 const user_update_dto_1 = require("../auth/models/user-update.dto");
 const auth_service_1 = require("../auth/auth.service");
+const user_preferences_service_1 = require("./user-preferences.service");
+const user_preferences_entity_1 = require("./models/user-preferences.entity");
 let UserController = class UserController {
-    constructor(userService, authService) {
+    constructor(userService, userPrefService, authService) {
         this.userService = userService;
+        this.userPrefService = userPrefService;
         this.authService = authService;
     }
     async all(page = 1) {
@@ -45,7 +48,7 @@ let UserController = class UserController {
         return this.userService.create(Object.assign(Object.assign({}, data), { password }));
     }
     async get(id) {
-        return this.userService.findOne({ id });
+        return this.userPrefService.findOne({ user: id }, ["user", "favourites"]);
     }
     async updateInfo(request, body) {
         const id = await this.authService.userId(request);
@@ -67,6 +70,17 @@ let UserController = class UserController {
         const data = __rest(body, []);
         await this.userService.update(id, Object.assign({}, data));
         return this.userService.findOne(id);
+    }
+    async updatePref(body, request) {
+        const id = await this.authService.userId(request);
+        const prefId = this.userPrefService.findIdByUserId(id);
+        const data = __rest(body, []);
+        await this.userPrefService.update(prefId, Object.assign({}, data));
+        return this.userPrefService.findOne({ user: id }, ["user", "favourites"]);
+    }
+    async addFav(ids, request) {
+        const id = await this.authService.userId(request);
+        return this.userPrefService.addFav(id, ids);
     }
     async delete(id) {
         return this.userService.delete(id);
@@ -119,6 +133,22 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "update", null);
 __decorate([
+    (0, common_1.Put)('pref/edit'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_preferences_entity_1.UserPreference, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "updatePref", null);
+__decorate([
+    (0, common_1.Put)('favourite/add'),
+    __param(0, (0, common_1.Body)("favourites")),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "addFav", null);
+__decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -130,6 +160,7 @@ UserController = __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [user_service_1.UserService,
+        user_preferences_service_1.UserPreferencesService,
         auth_service_1.AuthService])
 ], UserController);
 exports.UserController = UserController;

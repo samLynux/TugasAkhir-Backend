@@ -4,11 +4,13 @@ import { AbstractService } from 'src/common/abstract.service';
 import { PaginatedResult } from 'src/common/paginate-result.interface';
 import { Repository } from 'typeorm';
 import { User } from './models/user.entity';
+import { UserPreferencesService } from './user-preferences.service';
 
 @Injectable()
 export class UserService extends AbstractService{
     constructor(
-        @InjectRepository(User) private readonly userRepository: Repository<User>
+        @InjectRepository(User) private readonly userRepository: Repository<User>,
+        private userPrefService: UserPreferencesService,
     ) {
         super(userRepository);
     }
@@ -24,6 +26,13 @@ export class UserService extends AbstractService{
             }),
             meta
         };
+    }
+
+    async createPreference(user: User){
+        await this.userPrefService.create({
+            user: user,
+        });
+        
     }
 
 

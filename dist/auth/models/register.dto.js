@@ -15,14 +15,6 @@ class RegisterDTO {
 }
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], RegisterDTO.prototype, "firstname", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], RegisterDTO.prototype, "lastname", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], RegisterDTO.prototype, "email", void 0);
