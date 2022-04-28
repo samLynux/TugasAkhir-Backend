@@ -22,12 +22,12 @@ export class UserPreferencesService extends AbstractService{
     }
 
 
-    async addFav(id: number,ids: number[]){
+    async addFav(id: number,product_id: number){
         
         const prefs = await this.findOne({user: id}, ["favourites"]);
-        const product = await this.productService.findOne({id:1});
+        const product = await this.productService.findOne({id:product_id});
         let favourites: any = prefs.favourites
-        console.log(favourites);
+        // console.log(product_id);
         
         favourites.push(product)
         let newPrefs = new UserPreference()
@@ -35,6 +35,26 @@ export class UserPreferencesService extends AbstractService{
             ...prefs,
             favourites: favourites
         }
+        await this.userPrefRepository.save(newPrefs)
+        return this.findOne({user: id}, ["user", "favourites"]);
+        
+    }
+
+    async removeFav(id: number,product_id: number){
+        
+        const prefs = await this.findOne({user: id}, ["favourites"]);
+        const product = await this.productService.findOne({id:product_id});
+        let favourites: any = prefs.favourites
+        
+        
+        
+        
+        let newPrefs = new UserPreference()
+        newPrefs = {
+            ...prefs,
+            favourites: favourites.filter((fav)=> fav.id !== product.id)
+        }
+        // console.log(newPrefs);
         await this.userPrefRepository.save(newPrefs)
         return this.findOne({user: id}, ["user", "favourites"]);
         

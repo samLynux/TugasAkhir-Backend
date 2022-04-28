@@ -29,14 +29,22 @@ let UserPreferencesService = class UserPreferencesService extends abstract_servi
         const data = this.findOne({ user: id });
         return data.id;
     }
-    async addFav(id, ids) {
+    async addFav(id, product_id) {
         const prefs = await this.findOne({ user: id }, ["favourites"]);
-        const product = await this.productService.findOne({ id: 1 });
+        const product = await this.productService.findOne({ id: product_id });
         let favourites = prefs.favourites;
-        console.log(favourites);
         favourites.push(product);
         let newPrefs = new user_preferences_entity_1.UserPreference();
         newPrefs = Object.assign(Object.assign({}, prefs), { favourites: favourites });
+        await this.userPrefRepository.save(newPrefs);
+        return this.findOne({ user: id }, ["user", "favourites"]);
+    }
+    async removeFav(id, product_id) {
+        const prefs = await this.findOne({ user: id }, ["favourites"]);
+        const product = await this.productService.findOne({ id: product_id });
+        let favourites = prefs.favourites;
+        let newPrefs = new user_preferences_entity_1.UserPreference();
+        newPrefs = Object.assign(Object.assign({}, prefs), { favourites: favourites.filter((fav) => fav.id !== product.id) });
         await this.userPrefRepository.save(newPrefs);
         return this.findOne({ user: id }, ["user", "favourites"]);
     }

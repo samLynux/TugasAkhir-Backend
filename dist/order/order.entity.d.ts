@@ -6,5 +6,4 @@ export declare class Order {
     total: number;
     createdAt: string;
     order_items: OrderItem[];
-    get name(): string;
 }

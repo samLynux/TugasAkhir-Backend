@@ -8,8 +8,9 @@ import { UploadController } from './upload.controller';
 
 @Module({
   imports: [
+    CommonModule,
     TypeOrmModule.forFeature([Product]),
-    CommonModule
+    
   ],
   controllers: [ProductController, UploadController],
   providers: [ProductService],

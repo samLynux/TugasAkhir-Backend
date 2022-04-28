@@ -10,8 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
+const brand_entity_1 = require("../../common/models/brand.entity");
+const category_entity_1 = require("../../common/models/category.entity");
+const size_entity_1 = require("../../common/models/size.entity");
 const typeorm_1 = require("typeorm");
 let Product = class Product {
+    constructor() {
+        this.popularity = 0;
+    }
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
@@ -35,16 +41,12 @@ __decorate([
 ], Product.prototype, "price", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Product.prototype, "category", void 0);
+    __metadata("design:type", Number)
+], Product.prototype, "popularity", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", String)
-], Product.prototype, "size", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Product.prototype, "brand", void 0);
+], Product.prototype, "createdAt", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -53,6 +55,31 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Product.prototype, "secondaryColor", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => category_entity_1.Category),
+    (0, typeorm_1.JoinColumn)({ name: 'category_id' }),
+    __metadata("design:type", category_entity_1.Category)
+], Product.prototype, "category", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => brand_entity_1.Brand),
+    (0, typeorm_1.JoinColumn)({ name: 'brand_id' }),
+    __metadata("design:type", brand_entity_1.Brand)
+], Product.prototype, "brand", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => size_entity_1.Size),
+    (0, typeorm_1.JoinTable)({
+        name: "product_sizes",
+        joinColumn: {
+            name: "product_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "size_id",
+            referencedColumnName: "id"
+        }
+    }),
+    __metadata("design:type", Array)
+], Product.prototype, "sizes", void 0);
 Product = __decorate([
     (0, typeorm_1.Entity)('products')
 ], Product);

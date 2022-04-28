@@ -1,4 +1,5 @@
 import { Exclude } from "class-transformer";
+import { Category } from "src/common/models/category.entity";
 import { Product } from "src/product/models/product.entity";
 import { Column, Entity, JoinColumn,  JoinTable,  ManyToMany,  OneToMany,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
@@ -8,12 +9,25 @@ export class UserPreference{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({nullable: true})
-    category?:string;
+    @ManyToMany(() => Category)
+    @JoinTable({
+        name: "userprefs_category",
+        joinColumn: {
+            name: "userprefs_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "category_id",
+            referencedColumnName: "id"
+    }})
+    categories:Category[];
+    
     @Column({nullable: true})
     size?:string;
+
     @Column({nullable: true})
     brand?:string;
+    
     @Column({nullable: true})
     color?:string;
 
@@ -21,7 +35,7 @@ export class UserPreference{
     @JoinColumn({name:'user_id'})
     user:User;
 
-    @ManyToMany(() => Product, {cascade:true})
+    @ManyToMany(() => Product, )
     @JoinTable({
         name:'user_favourites',
         joinColumn:{name:"user_pref_id", referencedColumnName:"id"},

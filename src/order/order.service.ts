@@ -35,12 +35,6 @@ export class OrderService extends AbstractService{
             GROUP BY date`)
     }
 
-    async find(id: number){
-        
-        return this.orderRepository.find()
-        // return this.orderRepository.query(`SELECT  * 
-        //     FROM orders o 
-        //     WHERE o.userId = ${id}`)
-    }
+    
 
 }

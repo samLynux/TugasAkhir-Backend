@@ -8,18 +8,19 @@ export abstract class AbstractService {
 
     }
 
-    async all(relations: any[] = []): Promise<any[]>{
-        return this.repository.find({relations});
+    async all(relations: any[] = [], where: any = null, order: any = null): Promise<any[]>{
+        return this.repository.find({relations, where, order});
     }
 
-    async paginate(page: number = 1, relations: any[] = [], where: any = null):Promise<PaginatedResult>{
-        const take = 15;
+    async paginate(page: number = 1, relations: any[] = [], where: any = null, order: any = null):Promise<PaginatedResult>{
+        const take = 16;
 
         const [data, total] = await this.repository.findAndCount({
             take,
             skip: (page-1) * take,
             relations,
-            where
+            where,
+            order
         });
         return {
             data : data,

@@ -23,17 +23,28 @@ let ProductController = class ProductController {
         this.productService = productService;
     }
     async all(page = 1) {
-        return this.productService.paginate(page);
+        return this.productService.paginate(page, ["category", "brand", "sizes"], null, { popularity: "DESC", createdAt: "DESC" });
     }
-    async create(body) {
-        return this.productService.create(body);
+    async filtered({ categories, brands, size, colors }) {
+        const data = await this.productService.all(["category", "brand", "sizes"], null, { popularity: "DESC", createdAt: "DESC" });
+        return {
+            data: data.filter((d) => (categories ? categories.includes(d.category.value) : true) &&
+                (brands ? brands.includes(d.brand.value) : true) &&
+                (colors ? colors.includes(d.primaryColor || d.secondaryColor) : true) &&
+                (size ? !!d.sizes.find(s => s.value === size) : true)),
+        };
+    }
+    async create(body, ids = [1, 2, 3]) {
+        return this.productService.create(Object.assign(Object.assign({}, body), { sizes: ids.map(id => ({ id })) }));
     }
     async get(id) {
         return this.productService.findOne({ id });
     }
-    async update(id, body) {
-        await this.productService.update(id, body);
-        return this.productService.findOne(id);
+    async update(id, body, ids = [1, 2, 3]) {
+        if (body !== undefined)
+            await this.productService.update(id, body);
+        const newProduct = await this.productService.findOne(id);
+        return this.productService.create(Object.assign(Object.assign({}, newProduct), { sizes: ids.map(id => ({ id })) }));
     }
     async delete(id) {
         return this.productService.delete(id);
@@ -47,11 +58,19 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "all", null);
 __decorate([
-    (0, common_1.Post)(),
-    (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),
+    (0, common_1.Post)("filtered"),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [product_create_dto_1.ProductCreateDTO]),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "filtered", null);
+__decorate([
+    (0, common_1.Post)(),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),
+    __param(0, (0, common_1.Body)("body")),
+    __param(1, (0, common_1.Body)("sizes")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [product_create_dto_1.ProductCreateDTO, Array]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "create", null);
 __decorate([
@@ -64,9 +83,10 @@ __decorate([
 __decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Body)("body")),
+    __param(2, (0, common_1.Body)("sizes")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, product_update_dto_1.ProductUpdateDTO]),
+    __metadata("design:paramtypes", [Number, product_update_dto_1.ProductUpdateDTO, Array]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "update", null);
 __decorate([

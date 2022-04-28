@@ -27,9 +27,20 @@ let OrderController = class OrderController {
     }
     async all(page = 1, request) {
         const id = await this.authService.userId(request);
-        return this.orderService.paginate(page, ['order_items',], {
+        return this.orderService.paginate(page, ['order_items'], {
             user: { id: id },
         });
+    }
+    async allWithProducts(page = 1, request) {
+        const id = await this.authService.userId(request);
+        return this.orderService.paginate(page, ['order_items', "order_items.product"], {
+            user: { id: id },
+        });
+    }
+    async transactionDetails(id) {
+        return this.orderService.findOne({
+            id,
+        }, ['order_items', "order_items.product"]);
     }
     async create(body, request) {
         const id = await this.authService.userId(request);
@@ -53,6 +64,23 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "all", null);
+__decorate([
+    (0, common_1.Get)('ordersdetails'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Query)('page')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "allWithProducts", null);
+__decorate([
+    (0, common_1.Get)('orders/:id'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "transactionDetails", null);
 __decorate([
     (0, common_1.Post)('orders'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),

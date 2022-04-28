@@ -41,12 +41,16 @@ export class UserController {
         });
     }
 
-    @Get(':id')
-    async get(@Param('id') id: number){
-        return this.userPrefService.findOne({user: id}, ["user", "favourites"]);
+    @Get('me')
+    async getPrefs(@Req() request: Request,){
+        const id = await this.authService.userId(request);
+        return this.userPrefService.findOne(
+            {user: id}, 
+            ["user", "categories"]
+        );
     }
 
-    @Put('info')
+    @Put('updatepref')
     async updateInfo(@Req() request: Request, @Body() body: UserUpdateDTO){
         const id = await this.authService.userId(request);
         await this.userService.update(id, body)
@@ -106,13 +110,22 @@ export class UserController {
         return this.userPrefService.findOne({user: id}, ["user", "favourites"]);
     }
 
-    @Put('favourite/add')
+    @Post('favourite/add')
     async addFav(
-        @Body("favourites") ids: number[],
+        @Query('id') product_id: number,
         @Req() request: Request
     ){
         const id = await this.authService.userId(request);
-        return this.userPrefService.addFav(id, ids)
+        return this.userPrefService.addFav(id, product_id)
+    }
+
+    @Post('favourite/remove')
+    async removeFav(
+        @Query('id') product_id: number,
+        @Req() request: Request
+    ){
+        const id = await this.authService.userId(request);
+        return this.userPrefService.removeFav(id, product_id)
     }
 
     @Delete(':id')

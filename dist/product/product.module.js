@@ -19,8 +19,8 @@ let ProductModule = class ProductModule {
 ProductModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            common_module_1.CommonModule,
             typeorm_1.TypeOrmModule.forFeature([product_entity_1.Product]),
-            common_module_1.CommonModule
         ],
         controllers: [product_controller_1.ProductController, upload_controller_1.UploadController],
         providers: [product_service_1.ProductService],

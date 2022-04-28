@@ -41,9 +41,6 @@ let OrderService = class OrderService extends abstract_service_1.AbstractService
             JOIN order_items i on o.id = i.order_id
             GROUP BY date`);
     }
-    async find(id) {
-        return this.orderRepository.find();
-    }
 };
 OrderService = __decorate([
     (0, common_1.Injectable)(),

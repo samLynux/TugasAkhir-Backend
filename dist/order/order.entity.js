@@ -10,14 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Order = void 0;
-const class_transformer_1 = require("class-transformer");
 const user_entity_1 = require("../user/models/user.entity");
 const typeorm_1 = require("typeorm");
 const order_item_entity_1 = require("./order-item.entity");
 let Order = class Order {
-    get name() {
-        return `${this.user.firstname} ${this.user.lastname}`;
-    }
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
@@ -39,11 +35,6 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => order_item_entity_1.OrderItem, orderItem => orderItem.order),
     __metadata("design:type", Array)
 ], Order.prototype, "order_items", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String),
-    __metadata("design:paramtypes", [])
-], Order.prototype, "name", null);
 Order = __decorate([
     (0, typeorm_1.Entity)('orders')
 ], Order);

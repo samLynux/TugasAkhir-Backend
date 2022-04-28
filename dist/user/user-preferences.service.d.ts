@@ -7,5 +7,6 @@ export declare class UserPreferencesService extends AbstractService {
     private readonly userPrefRepository;
     constructor(productService: ProductService, userPrefRepository: Repository<UserPreference>);
     findIdByUserId(id: number): Promise<any>;
-    addFav(id: number, ids: number[]): Promise<any>;
+    addFav(id: number, product_id: number): Promise<any>;
+    removeFav(id: number, product_id: number): Promise<any>;
 }

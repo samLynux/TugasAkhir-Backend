@@ -26,10 +26,6 @@ export class Order{
     order_items:OrderItem[]
 
 
-    @Expose()
-    get name():string{
-        return `${this.user.firstname} ${this.user.lastname}`;
-    }
-
+    
     
 }

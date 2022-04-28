@@ -14,11 +14,12 @@ export declare class UserController {
     constructor(userService: UserService, userPrefService: UserPreferencesService, authService: AuthService);
     all(page?: number): Promise<PaginatedResult>;
     create(body: UserCreateDTO): Promise<User>;
-    get(id: number): Promise<any>;
+    getPrefs(request: Request): Promise<any>;
     updateInfo(request: Request, body: UserUpdateDTO): Promise<any>;
     updatePassword(request: Request, password: string, password_confirm: string): Promise<any>;
     update(id: number, body: UserUpdateDTO): Promise<any>;
     updatePref(body: UserPreference, request: Request): Promise<any>;
-    addFav(ids: number[], request: Request): Promise<any>;
+    addFav(product_id: number, request: Request): Promise<any>;
+    removeFav(product_id: number, request: Request): Promise<any>;
     delete(id: number): Promise<any>;
 }

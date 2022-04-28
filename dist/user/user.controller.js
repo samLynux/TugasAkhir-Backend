@@ -47,8 +47,9 @@ let UserController = class UserController {
         const data = __rest(body, []);
         return this.userService.create(Object.assign(Object.assign({}, data), { password }));
     }
-    async get(id) {
-        return this.userPrefService.findOne({ user: id }, ["user", "favourites"]);
+    async getPrefs(request) {
+        const id = await this.authService.userId(request);
+        return this.userPrefService.findOne({ user: id }, ["user", "categories"]);
     }
     async updateInfo(request, body) {
         const id = await this.authService.userId(request);
@@ -78,9 +79,13 @@ let UserController = class UserController {
         await this.userPrefService.update(prefId, Object.assign({}, data));
         return this.userPrefService.findOne({ user: id }, ["user", "favourites"]);
     }
-    async addFav(ids, request) {
+    async addFav(product_id, request) {
         const id = await this.authService.userId(request);
-        return this.userPrefService.addFav(id, ids);
+        return this.userPrefService.addFav(id, product_id);
+    }
+    async removeFav(product_id, request) {
+        const id = await this.authService.userId(request);
+        return this.userPrefService.removeFav(id, product_id);
     }
     async delete(id) {
         return this.userService.delete(id);
@@ -101,14 +106,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)('me'),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], UserController.prototype, "get", null);
+], UserController.prototype, "getPrefs", null);
 __decorate([
-    (0, common_1.Put)('info'),
+    (0, common_1.Put)('updatepref'),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -141,13 +146,21 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updatePref", null);
 __decorate([
-    (0, common_1.Put)('favourite/add'),
-    __param(0, (0, common_1.Body)("favourites")),
+    (0, common_1.Post)('favourite/add'),
+    __param(0, (0, common_1.Query)('id')),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "addFav", null);
+__decorate([
+    (0, common_1.Post)('favourite/remove'),
+    __param(0, (0, common_1.Query)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "removeFav", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),

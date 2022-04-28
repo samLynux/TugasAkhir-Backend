@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserPreference = void 0;
+const category_entity_1 = require("../../common/models/category.entity");
 const product_entity_1 = require("../../product/models/product.entity");
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
@@ -20,9 +21,20 @@ __decorate([
     __metadata("design:type", Number)
 ], UserPreference.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], UserPreference.prototype, "category", void 0);
+    (0, typeorm_1.ManyToMany)(() => category_entity_1.Category),
+    (0, typeorm_1.JoinTable)({
+        name: "userprefs_category",
+        joinColumn: {
+            name: "userprefs_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "category_id",
+            referencedColumnName: "id"
+        }
+    }),
+    __metadata("design:type", Array)
+], UserPreference.prototype, "categories", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
@@ -41,7 +53,7 @@ __decorate([
     __metadata("design:type", user_entity_1.User)
 ], UserPreference.prototype, "user", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => product_entity_1.Product, { cascade: true }),
+    (0, typeorm_1.ManyToMany)(() => product_entity_1.Product),
     (0, typeorm_1.JoinTable)({
         name: 'user_favourites',
         joinColumn: { name: "user_pref_id", referencedColumnName: "id" },

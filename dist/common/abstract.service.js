@@ -16,16 +16,17 @@ let AbstractService = class AbstractService {
     constructor(repository) {
         this.repository = repository;
     }
-    async all(relations = []) {
-        return this.repository.find({ relations });
+    async all(relations = [], where = null, order = null) {
+        return this.repository.find({ relations, where, order });
     }
-    async paginate(page = 1, relations = [], where = null) {
-        const take = 15;
+    async paginate(page = 1, relations = [], where = null, order = null) {
+        const take = 16;
         const [data, total] = await this.repository.findAndCount({
             take,
             skip: (page - 1) * take,
             relations,
-            where
+            where,
+            order
         });
         return {
             data: data,

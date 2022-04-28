@@ -9,6 +9,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommonModule = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
+const typeorm_1 = require("@nestjs/typeorm");
+const brand_entity_1 = require("./models/brand.entity");
+const category_entity_1 = require("./models/category.entity");
+const size_entity_1 = require("./models/size.entity");
 let CommonModule = class CommonModule {
 };
 CommonModule = __decorate([
@@ -18,6 +22,7 @@ CommonModule = __decorate([
                 secret: "secret",
                 signOptions: { expiresIn: '1d' },
             }),
+            typeorm_1.TypeOrmModule.forFeature([category_entity_1.Category, size_entity_1.Size, brand_entity_1.Brand]),
         ],
         exports: [
             jwt_1.JwtModule
