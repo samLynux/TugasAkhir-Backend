@@ -6,7 +6,7 @@ export class UserUpdateDTO{
     lastname?:string;
 
 
-    email?:string;
+    address?:string;
     
 
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Get, NotFoundException, Post, Req, Res, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Get, NotFoundException, Post, Put, Req, Res, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { RegisterDTO } from './models/register.dto';
@@ -33,7 +33,7 @@ export class AuthController {
             password : hashed,
         });
 
-        this.userService.createPreference(user);
+        
 
         return user
     }
@@ -79,6 +79,22 @@ export class AuthController {
             message: "success"
         }
     }
+
+    @Put('password')
+    async updatePassword(
+        @Body('password') password: string,
+        @Body('email') email: string,)
+    {
+        
+        
+        const hashed = await bcrypt.hash(password,12)
+        await this.userService.updatePassword(email, {
+            password: hashed
+        });
+
+        return this.userService.findOne({email});
+    }
+
 
     @Get('test')
     async test(){

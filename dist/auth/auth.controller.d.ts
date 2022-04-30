@@ -14,5 +14,6 @@ export declare class AuthController {
     logout(response: Response): Promise<{
         message: string;
     }>;
+    updatePassword(password: string, email: string): Promise<any>;
     test(): Promise<string>;
 }

@@ -2,9 +2,10 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UseP
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ProductCreateDTO } from './models/product-create.dto';
 import { ProductUpdateDTO } from './models/product-update.dto';
+import { Gender } from './models/product.entity';
 import { ProductService } from './product.service';
 
-@UseGuards(AuthGuard)
+
 @Controller('products')
 export class ProductController {
     constructor(private productService: ProductService){
@@ -14,30 +15,41 @@ export class ProductController {
     async all(
         @Query('page')page: number = 1
     ){
-        return  this.productService.paginate(page,["category","brand", "sizes"],null,{popularity:"DESC", createdAt:"DESC"});
+        return  this.productService.paginate(
+            page,
+            ["category","brand", "sizes", "primaryColor", "secondaryColor"],
+            null,
+            {popularity:"DESC", createdAt:"DESC"}
+        );
     }
 
     @Post("filtered")
     async filtered(
-        @Body() {categories, brands, size, colors}: {
+        @Body() {categories, brands, size, colors, gender}: {
             categories: string[],
             brands: string[],
             colors: string[],
-            size: string
+            size: string,
+            gender: Gender
         },
     ){
         
-        const data = await this.productService.all(["category","brand", "sizes"],null,{popularity:"DESC", createdAt:"DESC"});
+        const data = await this.productService.all(
+            ["category","brand", "sizes","primaryColor", "secondaryColor"],
+            null,{popularity:"DESC", createdAt:"DESC"}
+        );
 
+        const results = data.filter(
+            (d) => 
+                (categories ? categories.includes(d.category.value) : true) &&
+                (brands ? brands.includes(d.brand.value) : true ) &&
+                (colors ? colors.includes(d.primaryColor.value || d.secondaryColor.value) : true ) &&
+                (size ? !!d.sizes.find(s => s.value === size) : true) &&
+                (gender ? d.gender === gender: true)
+            )
         
         return {
-            data: data.filter(
-                (d) => 
-                    (categories ? categories.includes(d.category.value) : true) &&
-                    (brands ? brands.includes(d.brand.value) : true ) &&
-                    (colors ? colors.includes(d.primaryColor || d.secondaryColor) : true ) &&
-                    (size ? !!d.sizes.find(s => s.value === size) : true)
-                ),
+            data: results.slice(0,16)
         }
         
     }

@@ -36,6 +36,9 @@ let UserService = class UserService extends abstract_service_1.AbstractService {
         this.userRepository = userRepository;
         this.userPrefService = userPrefService;
     }
+    async updatePassword(email, data) {
+        return this.repository.update({ email }, data);
+    }
     async paginate(page = 1, relations = []) {
         const { data, meta } = await super.paginate(page, relations);
         return {
@@ -45,11 +48,6 @@ let UserService = class UserService extends abstract_service_1.AbstractService {
             }),
             meta
         };
-    }
-    async createPreference(user) {
-        await this.userPrefService.create({
-            user: user,
-        });
     }
 };
 UserService = __decorate([

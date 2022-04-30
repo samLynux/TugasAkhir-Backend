@@ -13,6 +13,9 @@ exports.User = void 0;
 const class_transformer_1 = require("class-transformer");
 const typeorm_1 = require("typeorm");
 let User = class User {
+    constructor() {
+        this.image = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
+    }
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),

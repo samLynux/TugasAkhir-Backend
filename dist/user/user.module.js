@@ -11,6 +11,10 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const auth_module_1 = require("../auth/auth.module");
 const common_module_1 = require("../common/common.module");
+const brand_entity_1 = require("../common/models/brand.entity");
+const category_entity_1 = require("../common/models/category.entity");
+const color_entity_1 = require("../common/models/color.entity");
+const size_entity_1 = require("../common/models/size.entity");
 const product_entity_1 = require("../product/models/product.entity");
 const product_module_1 = require("../product/product.module");
 const product_service_1 = require("../product/product.service");
@@ -24,7 +28,7 @@ let UserModule = class UserModule {
 UserModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, user_preferences_entity_1.UserPreference, product_entity_1.Product]),
+            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, user_preferences_entity_1.UserPreference, product_entity_1.Product, category_entity_1.Category, color_entity_1.Color, size_entity_1.Size, brand_entity_1.Brand]),
             common_module_1.CommonModule,
             auth_module_1.AuthModule,
             product_module_1.ProductModule

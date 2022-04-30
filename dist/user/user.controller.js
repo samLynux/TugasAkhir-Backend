@@ -39,8 +39,9 @@ let UserController = class UserController {
         this.userPrefService = userPrefService;
         this.authService = authService;
     }
-    async all(page = 1) {
-        return await this.userService.paginate(page);
+    async userGet(request) {
+        const id = await this.authService.userId(request);
+        return this.userService.findOne(id);
     }
     async create(body) {
         const password = await bcrypt.hash('1234', 12);
@@ -49,35 +50,30 @@ let UserController = class UserController {
     }
     async getPrefs(request) {
         const id = await this.authService.userId(request);
-        return this.userPrefService.findOne({ user: id }, ["user", "categories"]);
+        return this.userPrefService.findOne({ user: id }, ["user", "brands", "colors", "size"]);
     }
-    async updateInfo(request, body) {
+    async updateInfo(request, { brands, size, colors, gender }) {
         const id = await this.authService.userId(request);
-        await this.userService.update(id, body);
-        return this.userService.findOne(id);
-    }
-    async updatePassword(request, password, password_confirm) {
-        if (password !== password_confirm) {
-            throw new common_1.BadRequestException('Passwords does not match');
+        const userPref = await this.userPrefService.findOne({ user: id }, ["user", "brands", "colors", "size"]);
+        if (!userPref) {
+            await this.userPrefService.create({
+                colors: colors ? (await this.userPrefService.findColors(colors)) : [],
+                size: size ? await this.userPrefService.findSize(size) : [],
+                brands: brands ? await this.userPrefService.findBrands(brands) : [],
+                gender: gender ? gender : user_preferences_entity_1.Gender.n,
+                user: id
+            });
+            return this.userPrefService.findOne({ user: id }, ["user", "brands", "colors", "size"]);
         }
-        const id = await this.authService.userId(request);
-        const hashed = await bcrypt.hash(password, 12);
-        await this.userService.update(id, {
-            password: hashed
-        });
-        return this.userService.findOne(id);
+        const newPrefs = Object.assign(Object.assign({}, userPref), { colors: colors ? (await this.userPrefService.findColors(colors)) : [], size: size ? await this.userPrefService.findSize(size) : null, brands: brands ? await this.userPrefService.findBrands(brands) : [], gender: gender ? gender : user_preferences_entity_1.Gender.n, user: id });
+        await this.userPrefService.create(newPrefs);
+        return this.userPrefService.findOne({ user: id }, ["user", "brands", "colors", "size"]);
     }
-    async update(id, body) {
+    async update(body, request) {
+        const id = await this.authService.userId(request);
         const data = __rest(body, []);
         await this.userService.update(id, Object.assign({}, data));
         return this.userService.findOne(id);
-    }
-    async updatePref(body, request) {
-        const id = await this.authService.userId(request);
-        const prefId = this.userPrefService.findIdByUserId(id);
-        const data = __rest(body, []);
-        await this.userPrefService.update(prefId, Object.assign({}, data));
-        return this.userPrefService.findOne({ user: id }, ["user", "favourites"]);
     }
     async addFav(product_id, request) {
         const id = await this.authService.userId(request);
@@ -90,14 +86,18 @@ let UserController = class UserController {
     async delete(id) {
         return this.userService.delete(id);
     }
+    async forUser(request) {
+        const id = await this.authService.userId(request);
+        return this.userPrefService.forUser(id);
+    }
 };
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('page')),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], UserController.prototype, "all", null);
+], UserController.prototype, "userGet", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
@@ -113,38 +113,21 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getPrefs", null);
 __decorate([
-    (0, common_1.Put)('updatepref'),
+    (0, common_1.Post)('updatepref'),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, user_update_dto_1.UserUpdateDTO]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updateInfo", null);
 __decorate([
-    (0, common_1.Put)('password'),
-    __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Body)('password')),
-    __param(2, (0, common_1.Body)('password_confirm')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "updatePassword", null);
-__decorate([
-    (0, common_1.Put)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, user_update_dto_1.UserUpdateDTO]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "update", null);
-__decorate([
-    (0, common_1.Put)('pref/edit'),
+    (0, common_1.Put)(),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_preferences_entity_1.UserPreference, Object]),
+    __metadata("design:paramtypes", [user_update_dto_1.UserUpdateDTO, Object]),
     __metadata("design:returntype", Promise)
-], UserController.prototype, "updatePref", null);
+], UserController.prototype, "update", null);
 __decorate([
     (0, common_1.Post)('favourite/add'),
     __param(0, (0, common_1.Query)('id')),
@@ -168,6 +151,13 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Get)('foruser'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "forUser", null);
 UserController = __decorate([
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),

@@ -9,20 +9,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Category = void 0;
+exports.Color = void 0;
 const typeorm_1 = require("typeorm");
-let Category = class Category {
+let Color = class Color {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], Category.prototype, "id", void 0);
+], Color.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Category.prototype, "value", void 0);
-Category = __decorate([
-    (0, typeorm_1.Entity)('category')
-], Category);
-exports.Category = Category;
+], Color.prototype, "value", void 0);
+Color = __decorate([
+    (0, typeorm_1.Entity)('color')
+], Color);
+exports.Color = Color;
 //# sourceMappingURL=color.entity.js.map

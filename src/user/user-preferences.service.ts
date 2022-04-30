@@ -1,24 +1,54 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractService } from 'src/common/abstract.service';
+import { Brand } from 'src/common/models/brand.entity';
+import { Category } from 'src/common/models/category.entity';
+import { Color } from 'src/common/models/color.entity';
+import { Size } from 'src/common/models/size.entity';
 import { Product } from 'src/product/models/product.entity';
 import { ProductService } from 'src/product/product.service';
 import { Repository } from 'typeorm';
-import { UserPreference } from './models/user-preferences.entity';
+import { Gender, UserPreference } from './models/user-preferences.entity';
 
 @Injectable()
 export class UserPreferencesService extends AbstractService{
     constructor(
         private productService: ProductService,
-        @InjectRepository(UserPreference) private readonly userPrefRepository: Repository<UserPreference>
+        @InjectRepository(UserPreference) private readonly userPrefRepository: Repository<UserPreference>,
+        @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
+        @InjectRepository(Brand) private readonly brandRepository: Repository<Brand>,
+        @InjectRepository(Color) private readonly colorRepository: Repository<Color>,
+        @InjectRepository(Size) private readonly sizeRepository: Repository<Size>
     ) {
         super(userPrefRepository);
     }
 
-    async findIdByUserId(id: number){
-        const data: any =  this.findOne({user: id});
+    
 
-        return data.id
+    async findColors(name: string[]){
+        const data = await this.colorRepository.find()
+
+        return data.filter(d => name.includes(d.value))
+    }
+
+    async findCategories(name: string[]){
+        const data = await this.categoryRepository.find()
+
+        return data.filter(d => name.includes(d.value))
+    }
+
+    async findBrands(name: string[]){
+        const data = await this.brandRepository.find()
+
+        return data.filter(d => name.includes(d.value))
+
+        
+    }
+
+    async findSize(name: string){
+        return this.sizeRepository.findOne({value: name})
+        
+
     }
 
 
@@ -60,5 +90,29 @@ export class UserPreferencesService extends AbstractService{
         
     }
 
+    async forUser(id: number){
+        const pref = await this.findOne({user: id},[ "brands", "colors", "size"]);
+        const data = await this.productService.all(
+            ["category","brand", "sizes","primaryColor", "secondaryColor"],
+            null,{popularity:"DESC", createdAt:"DESC"}
+        );
 
+        if(pref.brands.length <= 0 &&
+            pref.colors.length <= 0  &&
+            !pref.size &&
+            pref.gender === Gender.n
+        ){
+            return null
+        }
+        const results = data.filter(
+                (d) => 
+                    (pref.brands.length > 0 ? !!pref.brands.find(s => s.id === d.brand.id) : true) &&
+                    (pref.colors.length > 0 ? !!pref.colors.find(s => s.id === d.primaryColor.id || s.id === d.secondaryColor.id) : true) &&
+                    (pref.size ? !!d.sizes.find(s => s.value === pref.size.value) : true) &&
+                    (pref.gender !== Gender.n ? d.gender === pref.gender: true)
+                )
+        
+        
+        return results.slice(0,16);
+    }
 }

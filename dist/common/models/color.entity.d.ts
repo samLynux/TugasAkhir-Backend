@@ -1,4 +1,4 @@
-export declare class Category {
+export declare class Color {
     id: number;
     value: string;
 }

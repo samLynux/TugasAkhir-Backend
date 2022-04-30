@@ -9,11 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Product = void 0;
+exports.Product = exports.Gender = void 0;
 const brand_entity_1 = require("../../common/models/brand.entity");
 const category_entity_1 = require("../../common/models/category.entity");
+const color_entity_1 = require("../../common/models/color.entity");
 const size_entity_1 = require("../../common/models/size.entity");
 const typeorm_1 = require("typeorm");
+var Gender;
+(function (Gender) {
+    Gender["m"] = "m";
+    Gender["f"] = "f";
+    Gender["n"] = "n";
+})(Gender = exports.Gender || (exports.Gender = {}));
 let Product = class Product {
     constructor() {
         this.popularity = 0;
@@ -44,16 +51,26 @@ __decorate([
     __metadata("design:type", Number)
 ], Product.prototype, "popularity", void 0);
 __decorate([
+    (0, typeorm_1.Column)({
+        type: "enum",
+        enum: Gender,
+        default: Gender.n
+    }),
+    __metadata("design:type", String)
+], Product.prototype, "gender", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", String)
 ], Product.prototype, "createdAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
+    (0, typeorm_1.ManyToOne)(() => color_entity_1.Color),
+    (0, typeorm_1.JoinColumn)({ name: 'primary_color_id' }),
+    __metadata("design:type", color_entity_1.Color)
 ], Product.prototype, "primaryColor", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
+    (0, typeorm_1.ManyToOne)(() => color_entity_1.Color),
+    (0, typeorm_1.JoinColumn)({ name: 'secondary_color_id' }),
+    __metadata("design:type", color_entity_1.Color)
 ], Product.prototype, "secondaryColor", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => category_entity_1.Category),

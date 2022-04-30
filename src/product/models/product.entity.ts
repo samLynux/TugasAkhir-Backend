@@ -1,9 +1,14 @@
 import { Brand } from "src/common/models/brand.entity";
 import { Category } from "src/common/models/category.entity";
+import { Color } from "src/common/models/color.entity";
 import { Size } from "src/common/models/size.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
-
+export enum Gender {
+    m = "m",
+    f = "f",
+    n = "n"
+}
 
 @Entity('products')
 export class Product{
@@ -20,15 +25,25 @@ export class Product{
     price:number;
     @Column()
     popularity:number = 0;
+
+    @Column({
+        type: "enum",
+        enum: Gender,
+        default: Gender.n
+    })
+    gender: Gender;
+
     @CreateDateColumn()
     createdAt:string;
 
     
 
-    @Column()
-    primaryColor:string;
-    @Column()
-    secondaryColor:string;
+    @ManyToOne(() => Color)
+    @JoinColumn({name:'primary_color_id'})
+    primaryColor:Color;
+    @ManyToOne(() => Color)
+    @JoinColumn({name:'secondary_color_id'})
+    secondaryColor:Color;
 
     @ManyToOne(() => Category)
     @JoinColumn({name:'category_id'})

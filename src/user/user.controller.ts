@@ -9,7 +9,7 @@ import { PaginatedResult } from 'src/common/paginate-result.interface';
 import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express';
 import { UserPreferencesService } from './user-preferences.service';
-import { UserPreference } from './models/user-preferences.entity';
+import { Gender, UserPreference } from './models/user-preferences.entity';
 
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -24,9 +24,18 @@ export class UserController {
 
     }
 
-    @Get() 
-    async all(@Query('page') page: number = 1){
-        return await this.userService.paginate(page);
+    // @Get() 
+    // async all(@Query('page') page: number = 1){
+    //     return await this.userService.paginate(page);
+    // }
+
+    @Get()
+    async userGet(
+        @Req() request: Request
+    ){
+        const id = await this.authService.userId(request);
+
+        return this.userService.findOne(id);
     }
 
     @Post()
@@ -46,69 +55,73 @@ export class UserController {
         const id = await this.authService.userId(request);
         return this.userPrefService.findOne(
             {user: id}, 
-            ["user", "categories"]
+            ["user",  "brands", "colors", "size"]
         );
     }
 
-    @Put('updatepref')
-    async updateInfo(@Req() request: Request, @Body() body: UserUpdateDTO){
-        const id = await this.authService.userId(request);
-        await this.userService.update(id, body)
-
-        return this.userService.findOne(id);
-    }
-
-    @Put('password')
-    async updatePassword(
+    @Post('updatepref')
+    async updateInfo(
         @Req() request: Request, 
-        @Body('password') password: string,
-        @Body('password_confirm') password_confirm: string,)
-    {
-        if(password !== password_confirm)
-        {
-            throw new BadRequestException('Passwords does not match');
-        }
-        const id = await this.authService.userId(request);
-
-        const hashed = await bcrypt.hash(password,12)
-        await this.userService.update(id, {
-            password: hashed
-        });
-
-        return this.userService.findOne(id);
-    }
-
-
-    @Put(':id')
-    async update(
-        @Param('id') id : number,
-        @Body() body: UserUpdateDTO
-
+        @Body() { brands, size, colors, gender}: {
+            brands: string[],
+            colors: string[],
+            size: string,
+            gender: Gender
+        },
     ){
-
-        const { ...data} = body;
-        await this.userService.update(id, {
-            ...data,
-        })
-
-        return this.userService.findOne(id);
+        const id = await this.authService.userId(request);
+        const userPref = await this.userPrefService.findOne(
+            {user: id}, 
+            ["user",  "brands", "colors", "size"]
+        );
+        if(!userPref){
+            await this.userPrefService.create({
+                colors: colors ? (await this.userPrefService.findColors(colors)) : [],
+                size: size ? await this.userPrefService.findSize(size) : [],
+                brands: brands ? await this.userPrefService.findBrands(brands) : [],
+                gender: gender ? gender: Gender.n,
+                user: id
+            });
+            return this.userPrefService.findOne(
+                {user: id}, 
+                ["user",  "brands", "colors", "size"]
+            );
+        }  
+         
+        const newPrefs: UserPreference = {
+            ...userPref,
+            colors: colors ? (await this.userPrefService.findColors(colors)) : [],
+            size: size ? await this.userPrefService.findSize(size) : null,
+            brands: brands ? await this.userPrefService.findBrands(brands) : [],
+            gender: gender ? gender : Gender.n,
+            user: id
+        }
+        await this.userPrefService.create(newPrefs)
+        
+        return this.userPrefService.findOne(
+            {user: id}, 
+            ["user", "brands", "colors", "size"]
+        );
     }
 
-    @Put('pref/edit')
-    async updatePref(
-        @Body() body: UserPreference,
+    
+
+
+    @Put()
+    async update(
+        @Body() body: UserUpdateDTO,
         @Req() request: Request
     ){
         const id = await this.authService.userId(request);
-        const prefId: any = this.userPrefService.findIdByUserId(id)
         const { ...data} = body;
-        
-        await this.userPrefService.update(prefId, {
+        await this.userService.update(id, {
             ...data,
         })
 
-        return this.userPrefService.findOne({user: id}, ["user", "favourites"]);
+        return this.userService.findOne(id);
     }
+
+
 
     @Post('favourite/add')
     async addFav(
@@ -131,5 +144,11 @@ export class UserController {
     @Delete(':id')
     async delete(@Param('id') id : number){
         return this.userService.delete(id);
+    }
+
+    @Get('foruser')
+    async forUser(@Req() request: Request,){
+        const id = await this.authService.userId(request);
+        return this.userPrefService.forUser(id)
     }
 }

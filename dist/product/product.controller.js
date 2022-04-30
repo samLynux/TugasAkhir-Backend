@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductController = void 0;
 const common_1 = require("@nestjs/common");
-const auth_guard_1 = require("../auth/auth.guard");
 const product_create_dto_1 = require("./models/product-create.dto");
 const product_update_dto_1 = require("./models/product-update.dto");
 const product_service_1 = require("./product.service");
@@ -23,15 +22,17 @@ let ProductController = class ProductController {
         this.productService = productService;
     }
     async all(page = 1) {
-        return this.productService.paginate(page, ["category", "brand", "sizes"], null, { popularity: "DESC", createdAt: "DESC" });
+        return this.productService.paginate(page, ["category", "brand", "sizes", "primaryColor", "secondaryColor"], null, { popularity: "DESC", createdAt: "DESC" });
     }
-    async filtered({ categories, brands, size, colors }) {
-        const data = await this.productService.all(["category", "brand", "sizes"], null, { popularity: "DESC", createdAt: "DESC" });
+    async filtered({ categories, brands, size, colors, gender }) {
+        const data = await this.productService.all(["category", "brand", "sizes", "primaryColor", "secondaryColor"], null, { popularity: "DESC", createdAt: "DESC" });
+        const results = data.filter((d) => (categories ? categories.includes(d.category.value) : true) &&
+            (brands ? brands.includes(d.brand.value) : true) &&
+            (colors ? colors.includes(d.primaryColor.value || d.secondaryColor.value) : true) &&
+            (size ? !!d.sizes.find(s => s.value === size) : true) &&
+            (gender ? d.gender === gender : true));
         return {
-            data: data.filter((d) => (categories ? categories.includes(d.category.value) : true) &&
-                (brands ? brands.includes(d.brand.value) : true) &&
-                (colors ? colors.includes(d.primaryColor || d.secondaryColor) : true) &&
-                (size ? !!d.sizes.find(s => s.value === size) : true)),
+            data: results.slice(0, 16)
         };
     }
     async create(body, ids = [1, 2, 3]) {
@@ -97,7 +98,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "delete", null);
 ProductController = __decorate([
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [product_service_1.ProductService])
 ], ProductController);

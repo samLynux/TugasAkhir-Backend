@@ -36,7 +36,6 @@ let AuthController = class AuthController {
             email: body.email,
             password: hashed,
         });
-        this.userService.createPreference(user);
         return user;
     }
     async login(email, password, response) {
@@ -60,6 +59,13 @@ let AuthController = class AuthController {
         return {
             message: "success"
         };
+    }
+    async updatePassword(password, email) {
+        const hashed = await bcrypt.hash(password, 12);
+        await this.userService.updatePassword(email, {
+            password: hashed
+        });
+        return this.userService.findOne({ email });
     }
     async test() {
         return "ok";
@@ -97,6 +103,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logout", null);
+__decorate([
+    (0, common_1.Put)('password'),
+    __param(0, (0, common_1.Body)('password')),
+    __param(1, (0, common_1.Body)('email')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "updatePassword", null);
 __decorate([
     (0, common_1.Get)('test'),
     __metadata("design:type", Function),

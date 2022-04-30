@@ -1,4 +1,5 @@
 import {  Entity } from "typeorm";
+import { Gender } from "./product.entity";
 
 @Entity('products')
 export class ProductUpdateDTO{
@@ -7,9 +8,10 @@ export class ProductUpdateDTO{
     image?:string;
     price?:number;
 
-    category?:string;
-    size?:string;
-    brand?:string;
-    primaryColor?:string;
-    secondaryColor?:string;
+    gender?:Gender;
+    category?:number;
+    size?:number[];
+    brand?:number;
+    primaryColor?:number;
+    secondaryColor?:number;
 }

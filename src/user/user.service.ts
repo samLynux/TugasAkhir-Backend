@@ -15,6 +15,10 @@ export class UserService extends AbstractService{
         super(userRepository);
     }
 
+    async updatePassword(email: string, data):Promise<any>{
+        return this.repository.update({email}, data);
+    }
+
 
     async paginate(page: number = 1, relations: any[] = []): Promise<PaginatedResult>{
         const {data, meta} = await super.paginate(page, relations)
@@ -28,12 +32,7 @@ export class UserService extends AbstractService{
         };
     }
 
-    async createPreference(user: User){
-        await this.userPrefService.create({
-            user: user,
-        });
-        
-    }
+    
 
 
 }

@@ -9,11 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserPreference = void 0;
-const category_entity_1 = require("../../common/models/category.entity");
+exports.UserPreference = exports.Gender = void 0;
+const brand_entity_1 = require("../../common/models/brand.entity");
+const color_entity_1 = require("../../common/models/color.entity");
+const size_entity_1 = require("../../common/models/size.entity");
 const product_entity_1 = require("../../product/models/product.entity");
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
+var Gender;
+(function (Gender) {
+    Gender["m"] = "m";
+    Gender["f"] = "f";
+    Gender["n"] = "n";
+})(Gender = exports.Gender || (exports.Gender = {}));
 let UserPreference = class UserPreference {
 };
 __decorate([
@@ -21,32 +29,48 @@ __decorate([
     __metadata("design:type", Number)
 ], UserPreference.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => category_entity_1.Category),
+    (0, typeorm_1.ManyToOne)(() => size_entity_1.Size),
+    (0, typeorm_1.JoinColumn)({ name: 'size_id' }),
+    __metadata("design:type", size_entity_1.Size)
+], UserPreference.prototype, "size", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => brand_entity_1.Brand),
     (0, typeorm_1.JoinTable)({
-        name: "userprefs_category",
+        name: "userprefs_brand",
         joinColumn: {
             name: "userprefs_id",
             referencedColumnName: "id"
         },
         inverseJoinColumn: {
-            name: "category_id",
+            name: "brand_id",
             referencedColumnName: "id"
         }
     }),
     __metadata("design:type", Array)
-], UserPreference.prototype, "categories", void 0);
+], UserPreference.prototype, "brands", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], UserPreference.prototype, "size", void 0);
+    (0, typeorm_1.ManyToMany)(() => color_entity_1.Color),
+    (0, typeorm_1.JoinTable)({
+        name: "userprefs_color",
+        joinColumn: {
+            name: "userprefs_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "color_id",
+            referencedColumnName: "id"
+        }
+    }),
+    __metadata("design:type", Array)
+], UserPreference.prototype, "colors", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({
+        type: "enum",
+        enum: Gender,
+        default: Gender.n
+    }),
     __metadata("design:type", String)
-], UserPreference.prototype, "brand", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], UserPreference.prototype, "color", void 0);
+], UserPreference.prototype, "gender", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => user_entity_1.User),
     (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
