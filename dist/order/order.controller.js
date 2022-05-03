@@ -51,13 +51,13 @@ let OrderController = class OrderController {
             total: body.total
         });
     }
-    async chart() {
-        return this.orderService.chart();
+    async chart(request) {
+        const id = await this.authService.userId(request);
+        return this.orderService.chart(id);
     }
 };
 __decorate([
     (0, common_1.Get)('orders'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Query)('page')),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -66,7 +66,6 @@ __decorate([
 ], OrderController.prototype, "all", null);
 __decorate([
     (0, common_1.Get)('ordersdetails'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Query)('page')),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -75,7 +74,6 @@ __decorate([
 ], OrderController.prototype, "allWithProducts", null);
 __decorate([
     (0, common_1.Get)('orders/:id'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -83,7 +81,6 @@ __decorate([
 ], OrderController.prototype, "transactionDetails", null);
 __decorate([
     (0, common_1.Post)('orders'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -92,8 +89,9 @@ __decorate([
 ], OrderController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)('chart'),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "chart", null);
 OrderController = __decorate([

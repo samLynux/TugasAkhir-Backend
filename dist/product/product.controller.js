@@ -39,7 +39,7 @@ let ProductController = class ProductController {
         return this.productService.create(Object.assign(Object.assign({}, body), { sizes: ids.map(id => ({ id })) }));
     }
     async get(id) {
-        return this.productService.findOne({ id });
+        return this.productService.findOne({ id }, ["sizes"]);
     }
     async update(id, body, ids = [1, 2, 3]) {
         if (body !== undefined)

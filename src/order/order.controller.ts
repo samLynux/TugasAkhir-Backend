@@ -20,7 +20,6 @@ export class OrderController {
 
 
     @Get('orders')
-    @UseGuards(AuthGuard)
     async all(@Query('page')page: number = 1, @Req() request: Request){
         const id = await this.authService.userId(request);
         // return this.orderService.find(id)
@@ -30,7 +29,6 @@ export class OrderController {
     }
 
     @Get('ordersdetails')
-    @UseGuards(AuthGuard)
     async allWithProducts(@Query('page')page: number = 1, @Req() request: Request){
         const id = await this.authService.userId(request);
         // return this.orderService.find(id)
@@ -40,7 +38,6 @@ export class OrderController {
     }
 
     @Get('orders/:id')
-    @UseGuards(AuthGuard)
     async transactionDetails(
         @Param('id') id: number
     ){
@@ -51,7 +48,6 @@ export class OrderController {
     }
 
     @Post('orders')
-    @UseGuards(AuthGuard)
     async create(@Body() body: OrderCreateDTO, @Req() request: Request){
         const id = await this.authService.userId(request);
  
@@ -67,7 +63,10 @@ export class OrderController {
    
 
     @Get('chart')
-    async chart(){
-        return this.orderService.chart();
+    async chart(@Req() request: Request){
+        const id = await this.authService.userId(request);
+
+
+        return this.orderService.chart(id);
     }
 }

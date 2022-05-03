@@ -11,6 +11,28 @@ export class ProductController {
     constructor(private productService: ProductService){
     }
 
+    // @Put('sizeall')
+    // async insertSizesToAll(
+    //     @Body("sizes") ids: number[] = [1,2,3]
+    // ){
+    //     const products = await this.productService.all(
+    //         ["category","brand", "sizes", "primaryColor", "secondaryColor"]
+    //     );
+    //     for(let x=8;x< products.length;x++)
+    //     {   
+    //         const newProduct = await this.productService.findOne(x);
+    //         await this.productService.create({
+    //             ...newProduct,
+    //             sizes: ids.map(id => ({id}))
+    //         });
+    //     }
+        
+
+    //     return this.productService.all(
+    //         ["category","brand", "sizes", "primaryColor", "secondaryColor"]
+    //     );
+    // }
+
     @Get()
     async all(
         @Query('page')page: number = 1
@@ -69,7 +91,7 @@ export class ProductController {
 
     @Get(':id')
     async get(@Param('id') id: number){
-        return this.productService.findOne({id});
+        return this.productService.findOne({id},["sizes"]);
     }
 
     @Put(':id')
@@ -93,4 +115,6 @@ export class ProductController {
     async delete(@Param('id') id : number){
         return this.productService.delete(id);
     }
+
+    
 }

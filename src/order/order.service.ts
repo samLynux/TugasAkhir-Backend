@@ -28,11 +28,16 @@ export class OrderService extends AbstractService{
         };
     }
 
-    async chart(){
-        return this.orderRepository.query(`SELECT DATE_FORMAT(o.createdat, '%Y-%m-%d') as date, sum(i.price * i.quantity) as sum 
-            FROM orders o 
-            JOIN order_items i on o.id = i.order_id
-            GROUP BY date`)
+    async chart(id: number){
+        const result = this.orderRepository.query(`
+            SELECT DATE_FORMAT(o.createdat, '%Y-%m') as date, SUM(o.total) as sum
+                FROM orders o 
+                WHERE o.userId = ${id} 
+                GROUP BY date
+        `)
+
+
+        return result;
     }
 
     

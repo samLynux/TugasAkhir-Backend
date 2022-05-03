@@ -59,6 +59,25 @@ export class UserController {
         );
     }
 
+    @Get('fav')
+    async getFavs(@Req() request: Request,){
+        const id = await this.authService.userId(request);
+        const favourites = await this.userPrefService.findOne(
+            {user: id}, 
+            ["favourites",
+                "favourites.category",
+                "favourites.brand", 
+                "favourites.sizes", 
+                "favourites.primaryColor", 
+                "favourites.secondaryColor"]
+        );
+
+        // console.log(favourites.favourites);
+        
+
+        return favourites.favourites
+    }
+
     @Post('updatepref')
     async updateInfo(
         @Req() request: Request, 

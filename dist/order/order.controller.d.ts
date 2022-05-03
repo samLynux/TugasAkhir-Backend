@@ -12,5 +12,5 @@ export declare class OrderController {
     allWithProducts(page: number, request: Request): Promise<import("../common/paginate-result.interface").PaginatedResult>;
     transactionDetails(id: number): Promise<any>;
     create(body: OrderCreateDTO, request: Request): Promise<any>;
-    chart(): Promise<any>;
+    chart(request: Request): Promise<any>;
 }

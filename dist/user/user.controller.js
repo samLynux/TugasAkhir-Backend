@@ -52,6 +52,16 @@ let UserController = class UserController {
         const id = await this.authService.userId(request);
         return this.userPrefService.findOne({ user: id }, ["user", "brands", "colors", "size"]);
     }
+    async getFavs(request) {
+        const id = await this.authService.userId(request);
+        const favourites = await this.userPrefService.findOne({ user: id }, ["favourites",
+            "favourites.category",
+            "favourites.brand",
+            "favourites.sizes",
+            "favourites.primaryColor",
+            "favourites.secondaryColor"]);
+        return favourites.favourites;
+    }
     async updateInfo(request, { brands, size, colors, gender }) {
         const id = await this.authService.userId(request);
         const userPref = await this.userPrefService.findOne({ user: id }, ["user", "brands", "colors", "size"]);
@@ -112,6 +122,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getPrefs", null);
+__decorate([
+    (0, common_1.Get)('fav'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getFavs", null);
 __decorate([
     (0, common_1.Post)('updatepref'),
     __param(0, (0, common_1.Req)()),

@@ -14,6 +14,7 @@ export declare class UserController {
     userGet(request: Request): Promise<any>;
     create(body: UserCreateDTO): Promise<User>;
     getPrefs(request: Request): Promise<any>;
+    getFavs(request: Request): Promise<any>;
     updateInfo(request: Request, { brands, size, colors, gender }: {
         brands: string[];
         colors: string[];
