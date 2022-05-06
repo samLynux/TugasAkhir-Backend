@@ -27,16 +27,9 @@ let AuthController = class AuthController {
         this.authService = authService;
     }
     async register(body) {
-        if (body.password !== body.passwordconfirm) {
-            throw new common_1.BadRequestException('Passwords does not match');
-        }
         const hashed = await bcrypt.hash(body.password, 12);
-        const user = await this.userService.create({
-            image: "http://localhost:3000/api/default_image/default_user.png",
-            email: body.email,
-            password: hashed,
-        });
-        return user;
+        const user = await this.userService.register(body.email, hashed);
+        return "user registered";
     }
     async login(email, password, response) {
         const user = await this.userService.findOne({ email });

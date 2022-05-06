@@ -8,46 +8,50 @@ import { OrderCreateDTO } from './order.entity.create.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
-@Controller()
+@Controller('orders')
 export class OrderController {
     constructor(
         private orderService:OrderService,
         private orderItemsService: OrderItemsService,
         private authService: AuthService,
         ){
-
+            
     }
 
+    @Get('chart')
+    async chart(@Req() request: Request){
+        const id = await this.authService.userId(request);
 
-    @Get('orders')
-    async all(@Query('page')page: number = 1, @Req() request: Request){
+
+        return this.orderService.chart(id);
+    }
+
+    @Get()
+    async all( @Req() request: Request){
         const id = await this.authService.userId(request);
         // return this.orderService.find(id)
-        return this.orderService.paginate(page, ['order_items'], {
-            user: { id: id},
-        });
+        return this.orderService.all( null, {
+            user: { id: id},}, {id: "DESC"}
+        );
+
+        
     }
 
-    @Get('ordersdetails')
-    async allWithProducts(@Query('page')page: number = 1, @Req() request: Request){
-        const id = await this.authService.userId(request);
-        // return this.orderService.find(id)
-        return this.orderService.paginate(page, ['order_items',"order_items.product"], {
-            user: { id: id},
-        });
-    }
+    
 
-    @Get('orders/:id')
+    @Get(':id')
     async transactionDetails(
         @Param('id') id: number
     ){
         // return this.orderService.find(id)
         return this.orderService.findOne({
             id, 
-        }, ['order_items',"order_items.product"]);
+        }, ['order_items']);
     }
 
-    @Post('orders')
+    
+
+    @Post()
     async create(@Body() body: OrderCreateDTO, @Req() request: Request){
         const id = await this.authService.userId(request);
  
@@ -62,11 +66,5 @@ export class OrderController {
 
    
 
-    @Get('chart')
-    async chart(@Req() request: Request){
-        const id = await this.authService.userId(request);
-
-
-        return this.orderService.chart(id);
-    }
+    
 }

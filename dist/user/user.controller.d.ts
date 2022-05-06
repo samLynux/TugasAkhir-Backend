@@ -15,6 +15,7 @@ export declare class UserController {
     create(body: UserCreateDTO): Promise<User>;
     getPrefs(request: Request): Promise<any>;
     getFavs(request: Request): Promise<any>;
+    checkFavs(request: Request, product_id: number): Promise<boolean>;
     updateInfo(request: Request, { brands, size, colors, gender }: {
         brands: string[];
         colors: string[];
@@ -23,7 +24,6 @@ export declare class UserController {
     }): Promise<any>;
     update(body: UserUpdateDTO, request: Request): Promise<any>;
     addFav(product_id: number, request: Request): Promise<any>;
-    removeFav(product_id: number, request: Request): Promise<any>;
     delete(id: number): Promise<any>;
     forUser(request: Request): Promise<any[]>;
 }

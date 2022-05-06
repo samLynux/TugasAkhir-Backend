@@ -22,20 +22,16 @@ export class AuthController {
 
     @Post('register')
     async register(@Body() body: RegisterDTO){
-        if(body.password !== body.passwordconfirm)
-        {
-            throw new BadRequestException('Passwords does not match');
-        }
+        
         const hashed = await bcrypt.hash(body.password,12);
-        const user = await this.userService.create({
-            image: "http://localhost:3000/api/default_image/default_user.png",
-            email : body.email,
-            password : hashed,
-        });
+        const user = await this.userService.register(
+            body.email,
+            hashed,
+        );
 
         
 
-        return user
+        return "user registered"
     }
 
     @Post('login')

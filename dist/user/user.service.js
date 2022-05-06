@@ -36,6 +36,16 @@ let UserService = class UserService extends abstract_service_1.AbstractService {
         this.userRepository = userRepository;
         this.userPrefService = userPrefService;
     }
+    async register(email, password) {
+        const user = await this.create({
+            email: email,
+            password: password,
+        });
+        this.userPrefService.create({
+            user: user
+        });
+        return user;
+    }
     async updatePassword(email, data) {
         return this.repository.update({ email }, data);
     }

@@ -22,9 +22,5 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], RegisterDTO.prototype, "password", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], RegisterDTO.prototype, "passwordconfirm", void 0);
 exports.RegisterDTO = RegisterDTO;
 //# sourceMappingURL=register.dto.js.map

@@ -18,6 +18,7 @@ export declare class UserPreferencesService extends AbstractService {
     findCategories(name: string[]): Promise<Category[]>;
     findBrands(name: string[]): Promise<Brand[]>;
     findSize(name: string): Promise<Size>;
+    checkFav(id: number, product_id: number): Promise<boolean>;
     addFav(id: number, product_id: number): Promise<any>;
     removeFav(id: number, product_id: number): Promise<any>;
     forUser(id: number): Promise<any[]>;

@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderItem = void 0;
-const product_entity_1 = require("../product/models/product.entity");
 const typeorm_1 = require("typeorm");
 const order_entity_1 = require("./order.entity");
 let OrderItem = class OrderItem {
@@ -32,15 +31,14 @@ __decorate([
     __metadata("design:type", Number)
 ], OrderItem.prototype, "quantity", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => order_entity_1.Order, order => order.order_items),
+    (0, typeorm_1.ManyToOne)(() => order_entity_1.Order, order => order.order_items, { onDelete: "CASCADE" }),
     (0, typeorm_1.JoinColumn)({ name: 'order_id' }),
     __metadata("design:type", order_entity_1.Order)
 ], OrderItem.prototype, "order", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => product_entity_1.Product),
-    (0, typeorm_1.JoinColumn)({ name: 'product_id' }),
-    __metadata("design:type", product_entity_1.Product)
-], OrderItem.prototype, "product", void 0);
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], OrderItem.prototype, "product_id", void 0);
 OrderItem = __decorate([
     (0, typeorm_1.Entity)('order_items')
 ], OrderItem);

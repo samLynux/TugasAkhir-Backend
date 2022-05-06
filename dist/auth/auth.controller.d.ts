@@ -8,7 +8,7 @@ export declare class AuthController {
     private jwtService;
     private authService;
     constructor(userService: UserService, jwtService: JwtService, authService: AuthService);
-    register(body: RegisterDTO): Promise<any>;
+    register(body: RegisterDTO): Promise<string>;
     login(email: string, password: string, response: Response): Promise<any>;
     user(request: Request): Promise<any>;
     logout(response: Response): Promise<{

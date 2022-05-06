@@ -78,6 +78,13 @@ export class UserController {
         return favourites.favourites
     }
 
+    @Get('favCheck')
+    async checkFavs(@Req() request: Request,@Query('id') product_id: number,){
+        const id = await this.authService.userId(request);
+        
+        return this.userPrefService.checkFav(id, product_id);
+    }
+
     @Post('updatepref')
     async updateInfo(
         @Req() request: Request, 
@@ -93,19 +100,19 @@ export class UserController {
             {user: id}, 
             ["user",  "brands", "colors", "size"]
         );
-        if(!userPref){
-            await this.userPrefService.create({
-                colors: colors ? (await this.userPrefService.findColors(colors)) : [],
-                size: size ? await this.userPrefService.findSize(size) : [],
-                brands: brands ? await this.userPrefService.findBrands(brands) : [],
-                gender: gender ? gender: Gender.n,
-                user: id
-            });
-            return this.userPrefService.findOne(
-                {user: id}, 
-                ["user",  "brands", "colors", "size"]
-            );
-        }  
+        // if(!userPref){
+        //     await this.userPrefService.create({
+        //         colors: colors ? (await this.userPrefService.findColors(colors)) : [],
+        //         size: size ? await this.userPrefService.findSize(size) : [],
+        //         brands: brands ? await this.userPrefService.findBrands(brands) : [],
+        //         gender: gender ? gender: Gender.n,
+        //         user: id
+        //     });
+        //     return this.userPrefService.findOne(
+        //         {user: id}, 
+        //         ["user",  "brands", "colors", "size"]
+        //     );
+        // }  
          
         const newPrefs: UserPreference = {
             ...userPref,
@@ -142,23 +149,20 @@ export class UserController {
 
 
 
-    @Post('favourite/add')
+    @Post('favourited')
     async addFav(
         @Query('id') product_id: number,
         @Req() request: Request
     ){
         const id = await this.authService.userId(request);
-        return this.userPrefService.addFav(id, product_id)
-    }
+        const favCheck = await this.userPrefService.checkFav(id, product_id);
 
-    @Post('favourite/remove')
-    async removeFav(
-        @Query('id') product_id: number,
-        @Req() request: Request
-    ){
-        const id = await this.authService.userId(request);
+        if(!favCheck){
+            return this.userPrefService.addFav(id, product_id)
+        }
         return this.userPrefService.removeFav(id, product_id)
     }
+
 
     @Delete(':id')
     async delete(@Param('id') id : number){

@@ -13,9 +13,6 @@ exports.User = void 0;
 const class_transformer_1 = require("class-transformer");
 const typeorm_1 = require("typeorm");
 let User = class User {
-    constructor() {
-        this.image = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
-    }
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
@@ -30,11 +27,11 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "lastname", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "image", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "address", void 0);
 __decorate([

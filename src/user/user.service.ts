@@ -15,6 +15,19 @@ export class UserService extends AbstractService{
         super(userRepository);
     }
 
+    async register(email: string, password: string){
+        const user = await this.create({
+            email : email,
+            password : password,
+        });
+
+        this.userPrefService.create({
+            user: user
+        })
+
+        return user;
+    }
+
     async updatePassword(email: string, data):Promise<any>{
         return this.repository.update({email}, data);
     }

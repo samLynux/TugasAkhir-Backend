@@ -62,19 +62,13 @@ let UserController = class UserController {
             "favourites.secondaryColor"]);
         return favourites.favourites;
     }
+    async checkFavs(request, product_id) {
+        const id = await this.authService.userId(request);
+        return this.userPrefService.checkFav(id, product_id);
+    }
     async updateInfo(request, { brands, size, colors, gender }) {
         const id = await this.authService.userId(request);
         const userPref = await this.userPrefService.findOne({ user: id }, ["user", "brands", "colors", "size"]);
-        if (!userPref) {
-            await this.userPrefService.create({
-                colors: colors ? (await this.userPrefService.findColors(colors)) : [],
-                size: size ? await this.userPrefService.findSize(size) : [],
-                brands: brands ? await this.userPrefService.findBrands(brands) : [],
-                gender: gender ? gender : user_preferences_entity_1.Gender.n,
-                user: id
-            });
-            return this.userPrefService.findOne({ user: id }, ["user", "brands", "colors", "size"]);
-        }
         const newPrefs = Object.assign(Object.assign({}, userPref), { colors: colors ? (await this.userPrefService.findColors(colors)) : [], size: size ? await this.userPrefService.findSize(size) : null, brands: brands ? await this.userPrefService.findBrands(brands) : [], gender: gender ? gender : user_preferences_entity_1.Gender.n, user: id });
         await this.userPrefService.create(newPrefs);
         return this.userPrefService.findOne({ user: id }, ["user", "brands", "colors", "size"]);
@@ -87,10 +81,10 @@ let UserController = class UserController {
     }
     async addFav(product_id, request) {
         const id = await this.authService.userId(request);
-        return this.userPrefService.addFav(id, product_id);
-    }
-    async removeFav(product_id, request) {
-        const id = await this.authService.userId(request);
+        const favCheck = await this.userPrefService.checkFav(id, product_id);
+        if (!favCheck) {
+            return this.userPrefService.addFav(id, product_id);
+        }
         return this.userPrefService.removeFav(id, product_id);
     }
     async delete(id) {
@@ -130,6 +124,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getFavs", null);
 __decorate([
+    (0, common_1.Get)('favCheck'),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "checkFavs", null);
+__decorate([
     (0, common_1.Post)('updatepref'),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
@@ -146,21 +148,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "update", null);
 __decorate([
-    (0, common_1.Post)('favourite/add'),
+    (0, common_1.Post)('favourited'),
     __param(0, (0, common_1.Query)('id')),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "addFav", null);
-__decorate([
-    (0, common_1.Post)('favourite/remove'),
-    __param(0, (0, common_1.Query)('id')),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "removeFav", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),

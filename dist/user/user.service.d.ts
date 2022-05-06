@@ -7,6 +7,7 @@ export declare class UserService extends AbstractService {
     private readonly userRepository;
     private userPrefService;
     constructor(userRepository: Repository<User>, userPrefService: UserPreferencesService);
+    register(email: string, password: string): Promise<any>;
     updatePassword(email: string, data: any): Promise<any>;
     paginate(page?: number, relations?: any[]): Promise<PaginatedResult>;
 }

@@ -32,7 +32,7 @@ __decorate([
     __metadata("design:type", String)
 ], Order.prototype, "createdAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => order_item_entity_1.OrderItem, orderItem => orderItem.order),
+    (0, typeorm_1.OneToMany)(() => order_item_entity_1.OrderItem, orderItem => orderItem.order, { cascade: true }),
     __metadata("design:type", Array)
 ], Order.prototype, "order_items", void 0);
 Order = __decorate([

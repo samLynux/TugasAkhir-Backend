@@ -10,6 +10,4 @@ export class RegisterDTO{
     @IsNotEmpty()
     password:string;
 
-    @IsNotEmpty()
-    passwordconfirm:string;
 }

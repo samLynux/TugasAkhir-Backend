@@ -48,6 +48,16 @@ let UserPreferencesService = class UserPreferencesService extends abstract_servi
     async findSize(name) {
         return this.sizeRepository.findOne({ value: name });
     }
+    async checkFav(id, product_id) {
+        const favourites = await this.findOne({ user: id }, ["favourites"]);
+        let favCheck = false;
+        favourites.favourites.forEach(fav => {
+            if (product_id == fav.id) {
+                favCheck = true;
+            }
+        });
+        return favCheck;
+    }
     async addFav(id, product_id) {
         const prefs = await this.findOne({ user: id }, ["favourites"]);
         const product = await this.productService.findOne({ id: product_id });

@@ -25,22 +25,20 @@ let OrderController = class OrderController {
         this.orderItemsService = orderItemsService;
         this.authService = authService;
     }
-    async all(page = 1, request) {
+    async chart(request) {
         const id = await this.authService.userId(request);
-        return this.orderService.paginate(page, ['order_items'], {
-            user: { id: id },
-        });
+        return this.orderService.chart(id);
     }
-    async allWithProducts(page = 1, request) {
+    async all(request) {
         const id = await this.authService.userId(request);
-        return this.orderService.paginate(page, ['order_items', "order_items.product"], {
+        return this.orderService.all(null, {
             user: { id: id },
-        });
+        }, { id: "DESC" });
     }
     async transactionDetails(id) {
         return this.orderService.findOne({
             id,
-        }, ['order_items', "order_items.product"]);
+        }, ['order_items']);
     }
     async create(body, request) {
         const id = await this.authService.userId(request);
@@ -51,42 +49,7 @@ let OrderController = class OrderController {
             total: body.total
         });
     }
-    async chart(request) {
-        const id = await this.authService.userId(request);
-        return this.orderService.chart(id);
-    }
 };
-__decorate([
-    (0, common_1.Get)('orders'),
-    __param(0, (0, common_1.Query)('page')),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
-    __metadata("design:returntype", Promise)
-], OrderController.prototype, "all", null);
-__decorate([
-    (0, common_1.Get)('ordersdetails'),
-    __param(0, (0, common_1.Query)('page')),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
-    __metadata("design:returntype", Promise)
-], OrderController.prototype, "allWithProducts", null);
-__decorate([
-    (0, common_1.Get)('orders/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], OrderController.prototype, "transactionDetails", null);
-__decorate([
-    (0, common_1.Post)('orders'),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [order_entity_create_dto_1.OrderCreateDTO, Object]),
-    __metadata("design:returntype", Promise)
-], OrderController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)('chart'),
     __param(0, (0, common_1.Req)()),
@@ -94,10 +57,32 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "chart", null);
+__decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "all", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "transactionDetails", null);
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [order_entity_create_dto_1.OrderCreateDTO, Object]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "create", null);
 OrderController = __decorate([
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
-    (0, common_1.Controller)(),
+    (0, common_1.Controller)('orders'),
     __metadata("design:paramtypes", [order_service_1.OrderService,
         order_items_service_1.OrderItemsService,
         auth_service_1.AuthService])

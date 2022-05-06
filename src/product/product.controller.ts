@@ -91,7 +91,7 @@ export class ProductController {
 
     @Get(':id')
     async get(@Param('id') id: number){
-        return this.productService.findOne({id},["sizes"]);
+        return this.productService.findOne({id},["category","brand", "sizes", "primaryColor", "secondaryColor"]);
     }
 
     @Put(':id')

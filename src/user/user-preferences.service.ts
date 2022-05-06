@@ -51,6 +51,23 @@ export class UserPreferencesService extends AbstractService{
 
     }
 
+    async checkFav(id: number,product_id: number){
+        
+        const favourites = await this.findOne(
+            {user: id}, 
+            ["favourites"]
+        );
+        let favCheck = false;
+        favourites.favourites.forEach(fav => {
+            if(product_id == fav.id){
+                favCheck = true
+            }
+        });
+        
+        return favCheck;
+        
+    }
+
 
     async addFav(id: number,product_id: number){
         
