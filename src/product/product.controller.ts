@@ -67,7 +67,7 @@ export class ProductController {
                 (brands ? brands.includes(d.brand.value) : true ) &&
                 (colors ? colors.includes(d.primaryColor.value || d.secondaryColor.value) : true ) &&
                 (size ? !!d.sizes.find(s => s.value === size) : true) &&
-                (gender ? d.gender === gender: true)
+                (gender ? (d.gender === gender || d.gender === Gender.n): true)
             )
         
         return {

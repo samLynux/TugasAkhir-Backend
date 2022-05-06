@@ -83,7 +83,7 @@ export class UserPreferencesService extends AbstractService{
             favourites: favourites
         }
         await this.userPrefRepository.save(newPrefs)
-        return this.findOne({user: id}, ["user", "favourites"]);
+        return true
         
     }
 
@@ -103,7 +103,7 @@ export class UserPreferencesService extends AbstractService{
         }
         // console.log(newPrefs);
         await this.userPrefRepository.save(newPrefs)
-        return this.findOne({user: id}, ["user", "favourites"]);
+        return false
         
     }
 
@@ -126,7 +126,7 @@ export class UserPreferencesService extends AbstractService{
                     (pref.brands.length > 0 ? !!pref.brands.find(s => s.id === d.brand.id) : true) &&
                     (pref.colors.length > 0 ? !!pref.colors.find(s => s.id === d.primaryColor.id || s.id === d.secondaryColor.id) : true) &&
                     (pref.size ? !!d.sizes.find(s => s.value === pref.size.value) : true) &&
-                    (pref.gender !== Gender.n ? d.gender === pref.gender: true)
+                    (pref.gender !== Gender.n ? (d.gender === pref.gender || d.gender ===  Gender.n): true)
                 )
         
         

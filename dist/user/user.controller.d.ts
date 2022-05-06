@@ -23,7 +23,7 @@ export declare class UserController {
         gender: Gender;
     }): Promise<any>;
     update(body: UserUpdateDTO, request: Request): Promise<any>;
-    addFav(product_id: number, request: Request): Promise<any>;
+    addFav(product_id: number, request: Request): Promise<boolean>;
     delete(id: number): Promise<any>;
     forUser(request: Request): Promise<any[]>;
 }

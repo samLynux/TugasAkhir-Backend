@@ -16,6 +16,7 @@ exports.ProductController = void 0;
 const common_1 = require("@nestjs/common");
 const product_create_dto_1 = require("./models/product-create.dto");
 const product_update_dto_1 = require("./models/product-update.dto");
+const product_entity_1 = require("./models/product.entity");
 const product_service_1 = require("./product.service");
 let ProductController = class ProductController {
     constructor(productService) {
@@ -30,7 +31,7 @@ let ProductController = class ProductController {
             (brands ? brands.includes(d.brand.value) : true) &&
             (colors ? colors.includes(d.primaryColor.value || d.secondaryColor.value) : true) &&
             (size ? !!d.sizes.find(s => s.value === size) : true) &&
-            (gender ? d.gender === gender : true));
+            (gender ? (d.gender === gender || d.gender === product_entity_1.Gender.n) : true));
         return {
             data: results.slice(0, 16)
         };

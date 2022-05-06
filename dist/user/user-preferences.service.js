@@ -66,7 +66,7 @@ let UserPreferencesService = class UserPreferencesService extends abstract_servi
         let newPrefs = new user_preferences_entity_1.UserPreference();
         newPrefs = Object.assign(Object.assign({}, prefs), { favourites: favourites });
         await this.userPrefRepository.save(newPrefs);
-        return this.findOne({ user: id }, ["user", "favourites"]);
+        return true;
     }
     async removeFav(id, product_id) {
         const prefs = await this.findOne({ user: id }, ["favourites"]);
@@ -75,7 +75,7 @@ let UserPreferencesService = class UserPreferencesService extends abstract_servi
         let newPrefs = new user_preferences_entity_1.UserPreference();
         newPrefs = Object.assign(Object.assign({}, prefs), { favourites: favourites.filter((fav) => fav.id !== product.id) });
         await this.userPrefRepository.save(newPrefs);
-        return this.findOne({ user: id }, ["user", "favourites"]);
+        return false;
     }
     async forUser(id) {
         const pref = await this.findOne({ user: id }, ["brands", "colors", "size"]);
@@ -89,7 +89,7 @@ let UserPreferencesService = class UserPreferencesService extends abstract_servi
         const results = data.filter((d) => (pref.brands.length > 0 ? !!pref.brands.find(s => s.id === d.brand.id) : true) &&
             (pref.colors.length > 0 ? !!pref.colors.find(s => s.id === d.primaryColor.id || s.id === d.secondaryColor.id) : true) &&
             (pref.size ? !!d.sizes.find(s => s.value === pref.size.value) : true) &&
-            (pref.gender !== user_preferences_entity_1.Gender.n ? d.gender === pref.gender : true));
+            (pref.gender !== user_preferences_entity_1.Gender.n ? (d.gender === pref.gender || d.gender === user_preferences_entity_1.Gender.n) : true));
         return results.slice(0, 16);
     }
 };
