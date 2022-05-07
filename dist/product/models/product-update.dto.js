@@ -11,7 +11,7 @@ const typeorm_1 = require("typeorm");
 let ProductUpdateDTO = class ProductUpdateDTO {
 };
 ProductUpdateDTO = __decorate([
-    (0, typeorm_1.Entity)('products')
+    (0, typeorm_1.Entity)('productsUpdate')
 ], ProductUpdateDTO);
 exports.ProductUpdateDTO = ProductUpdateDTO;
 //# sourceMappingURL=product-update.dto.js.map

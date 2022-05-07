@@ -34,7 +34,7 @@ __decorate([
     __metadata("design:type", Number)
 ], ProductCreateDTO.prototype, "price", void 0);
 ProductCreateDTO = __decorate([
-    (0, typeorm_1.Entity)('products')
+    (0, typeorm_1.Entity)('productsCreate')
 ], ProductCreateDTO);
 exports.ProductCreateDTO = ProductCreateDTO;
 //# sourceMappingURL=product-create.dto.js.map

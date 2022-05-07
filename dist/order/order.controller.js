@@ -19,11 +19,13 @@ const order_service_1 = require("./order.service");
 const order_items_service_1 = require("./order-items.service");
 const auth_service_1 = require("../auth/auth.service");
 const order_entity_create_dto_1 = require("./order.entity.create.dto");
+const product_service_1 = require("../product/product.service");
 let OrderController = class OrderController {
-    constructor(orderService, orderItemsService, authService) {
+    constructor(orderService, orderItemsService, authService, productService) {
         this.orderService = orderService;
         this.orderItemsService = orderItemsService;
         this.authService = authService;
+        this.productService = productService;
     }
     async chart(request) {
         const id = await this.authService.userId(request);
@@ -38,16 +40,22 @@ let OrderController = class OrderController {
     async transactionDetails(id) {
         return this.orderService.findOne({
             id,
-        }, ['order_items']);
+        }, ['order_items', "order_items.product"]);
     }
     async create(body, request) {
         const id = await this.authService.userId(request);
-        const items = await this.orderItemsService.create(body.order_items);
+        const items = await this.orderItemsService.create(body.order_items.map((i) => ({
+            product_title: i.product_title,
+            price: i.price,
+            quantity: i.quantity,
+            product: i.product_id
+        })));
         return this.orderService.create({
             user: id,
             order_items: items,
             total: body.total
         });
+        return items;
     }
 };
 __decorate([
@@ -85,7 +93,8 @@ OrderController = __decorate([
     (0, common_1.Controller)('orders'),
     __metadata("design:paramtypes", [order_service_1.OrderService,
         order_items_service_1.OrderItemsService,
-        auth_service_1.AuthService])
+        auth_service_1.AuthService,
+        product_service_1.ProductService])
 ], OrderController);
 exports.OrderController = OrderController;
 //# sourceMappingURL=order.controller.js.map

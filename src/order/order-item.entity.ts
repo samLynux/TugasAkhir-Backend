@@ -1,5 +1,5 @@
 import { Product } from "src/product/models/product.entity";
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Order } from "./order.entity";
 
 
@@ -21,6 +21,8 @@ export class OrderItem{
     @JoinColumn({name:'order_id'})
     order:Order;
 
-    @Column({nullable:true})
-    product_id:number;
+    @ManyToOne(() => Product,)
+    @JoinColumn({name:'product_id'})
+    product:Product;
+
 }

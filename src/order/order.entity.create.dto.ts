@@ -5,7 +5,7 @@ import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGenerate
 import { OrderItem } from "./order-item.entity";
 
 
-@Entity('orders')
+@Entity('ordersCreate')
 export class OrderCreateDTO{
     
     @IsNotEmpty()
@@ -13,7 +13,12 @@ export class OrderCreateDTO{
     
 
     @IsNotEmpty()
-    order_items:OrderItem[]
+    order_items:{
+        product_title:string;
+        price:number;
+        quantity:number;
+        product_id:number;
+    }[]
 
 
 

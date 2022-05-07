@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Gender } from "./product.entity";
 
 
-@Entity('products')
+@Entity('productsCreate')
 export class ProductCreateDTO{
 
     @IsNotEmpty()

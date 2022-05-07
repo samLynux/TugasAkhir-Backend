@@ -1,5 +1,9 @@
-import { OrderItem } from "./order-item.entity";
 export declare class OrderCreateDTO {
     total: number;
-    order_items: OrderItem[];
+    order_items: {
+        product_title: string;
+        price: number;
+        quantity: number;
+        product_id: number;
+    }[];
 }

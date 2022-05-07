@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import { OrderItemsService } from './order-items.service';
 import { AuthService } from 'src/auth/auth.service';
 import { OrderCreateDTO } from './order.entity.create.dto';
+import { ProductService } from 'src/product/product.service';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
@@ -14,6 +15,7 @@ export class OrderController {
         private orderService:OrderService,
         private orderItemsService: OrderItemsService,
         private authService: AuthService,
+        private productService: ProductService,
         ){
             
     }
@@ -46,7 +48,7 @@ export class OrderController {
         // return this.orderService.find(id)
         return this.orderService.findOne({
             id, 
-        }, ['order_items']);
+        }, ['order_items',"order_items.product"]);
     }
 
     
@@ -55,13 +57,22 @@ export class OrderController {
     async create(@Body() body: OrderCreateDTO, @Req() request: Request){
         const id = await this.authService.userId(request);
  
-        const items = await this.orderItemsService.create(body.order_items);
+        const items = await this.orderItemsService.create(
+            body.order_items.map((i) => ({
+                product_title:i.product_title,
+                price:i.price,
+                quantity:i.quantity,
+                product:  i.product_id
+            }))
+        );
 
         return this.orderService.create({
             user: id,
             order_items: items,
             total: body.total
         });
+
+        return items
     }
 
    

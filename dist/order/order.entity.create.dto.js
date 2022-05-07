@@ -23,7 +23,7 @@ __decorate([
     __metadata("design:type", Array)
 ], OrderCreateDTO.prototype, "order_items", void 0);
 OrderCreateDTO = __decorate([
-    (0, typeorm_1.Entity)('orders')
+    (0, typeorm_1.Entity)('ordersCreate')
 ], OrderCreateDTO);
 exports.OrderCreateDTO = OrderCreateDTO;
 //# sourceMappingURL=order.entity.create.dto.js.map
