@@ -2,7 +2,7 @@ import { Brand } from "src/common/models/brand.entity";
 import { Category } from "src/common/models/category.entity";
 import { Color } from "src/common/models/color.entity";
 import { Size } from "src/common/models/size.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne,  PrimaryGeneratedColumn } from "typeorm";
 
 export enum Gender {
     m = "m",
@@ -23,7 +23,7 @@ export class Product{
     image:string;
     @Column()
     price:number;
-    @Column()
+    @Column({default: 0})
     popularity:number = 0;
 
     @Column({

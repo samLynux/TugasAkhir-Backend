@@ -17,7 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const abstract_service_1 = require("../common/abstract.service");
 const typeorm_2 = require("typeorm");
-const order_entity_1 = require("./order.entity");
+const order_entity_1 = require("./models/order.entity");
 let OrderService = class OrderService extends abstract_service_1.AbstractService {
     constructor(orderRepository) {
         super(orderRepository);

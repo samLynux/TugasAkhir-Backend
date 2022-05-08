@@ -1,5 +1,5 @@
 import { Product } from "src/product/models/product.entity";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn,  ManyToOne,  PrimaryGeneratedColumn } from "typeorm";
 import { Order } from "./order.entity";
 
 

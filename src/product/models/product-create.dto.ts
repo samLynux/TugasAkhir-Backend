@@ -1,10 +1,8 @@
 import { IsNotEmpty } from "class-validator";
-import { type } from "os";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column } from "typeorm";
 import { Gender } from "./product.entity";
 
 
-@Entity('productsCreate')
 export class ProductCreateDTO{
 
     @IsNotEmpty()
@@ -13,7 +11,7 @@ export class ProductCreateDTO{
     description:string;
     
     @Column( )
-    image:string = "http://localhost:3000/api/default_image/default_product.png";
+    image:string;
     @IsNotEmpty()
     price:number;
     gender?:Gender;

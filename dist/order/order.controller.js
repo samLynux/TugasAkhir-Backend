@@ -18,14 +18,12 @@ const auth_guard_1 = require("../auth/auth.guard");
 const order_service_1 = require("./order.service");
 const order_items_service_1 = require("./order-items.service");
 const auth_service_1 = require("../auth/auth.service");
-const order_entity_create_dto_1 = require("./order.entity.create.dto");
-const product_service_1 = require("../product/product.service");
+const order_create_dto_1 = require("./models/order.create.dto");
 let OrderController = class OrderController {
-    constructor(orderService, orderItemsService, authService, productService) {
+    constructor(orderService, orderItemsService, authService) {
         this.orderService = orderService;
         this.orderItemsService = orderItemsService;
         this.authService = authService;
-        this.productService = productService;
     }
     async chart(request) {
         const id = await this.authService.userId(request);
@@ -55,7 +53,6 @@ let OrderController = class OrderController {
             order_items: items,
             total: body.total
         });
-        return items;
     }
 };
 __decorate([
@@ -84,7 +81,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [order_entity_create_dto_1.OrderCreateDTO, Object]),
+    __metadata("design:paramtypes", [order_create_dto_1.OrderCreateDTO, Object]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "create", null);
 OrderController = __decorate([
@@ -93,8 +90,7 @@ OrderController = __decorate([
     (0, common_1.Controller)('orders'),
     __metadata("design:paramtypes", [order_service_1.OrderService,
         order_items_service_1.OrderItemsService,
-        auth_service_1.AuthService,
-        product_service_1.ProductService])
+        auth_service_1.AuthService])
 ], OrderController);
 exports.OrderController = OrderController;
 //# sourceMappingURL=order.controller.js.map

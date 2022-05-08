@@ -5,10 +5,10 @@ import { CommonModule } from 'src/common/common.module';
 import { Product } from 'src/product/models/product.entity';
 import { ProductService } from 'src/product/product.service';
 import { User } from 'src/user/models/user.entity';
-import { OrderItem } from './order-item.entity';
+import { OrderItem } from './models/order-item.entity';
 import { OrderItemsService } from './order-items.service';
 import { OrderController } from './order.controller';
-import { Order } from './order.entity';
+import { Order } from './models/order.entity';
 import { OrderService } from './order.service';
 
 @Module({

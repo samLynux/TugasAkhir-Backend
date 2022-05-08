@@ -9,26 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductCreateDTO = void 0;
+exports.OrderCreateDTO = void 0;
 const class_validator_1 = require("class-validator");
-const typeorm_1 = require("typeorm");
-class ProductCreateDTO {
+class OrderCreateDTO {
 }
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], ProductCreateDTO.prototype, "title", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], ProductCreateDTO.prototype, "description", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], ProductCreateDTO.prototype, "image", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
-], ProductCreateDTO.prototype, "price", void 0);
-exports.ProductCreateDTO = ProductCreateDTO;
-//# sourceMappingURL=product-create.dto.js.map
+], OrderCreateDTO.prototype, "total", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Array)
+], OrderCreateDTO.prototype, "order_items", void 0);
+exports.OrderCreateDTO = OrderCreateDTO;
+//# sourceMappingURL=order.create.dto.js.map

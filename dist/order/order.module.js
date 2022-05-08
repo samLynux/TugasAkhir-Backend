@@ -14,10 +14,10 @@ const common_module_1 = require("../common/common.module");
 const product_entity_1 = require("../product/models/product.entity");
 const product_service_1 = require("../product/product.service");
 const user_entity_1 = require("../user/models/user.entity");
-const order_item_entity_1 = require("./order-item.entity");
+const order_item_entity_1 = require("./models/order-item.entity");
 const order_items_service_1 = require("./order-items.service");
 const order_controller_1 = require("./order.controller");
-const order_entity_1 = require("./order.entity");
+const order_entity_1 = require("./models/order.entity");
 const order_service_1 = require("./order.service");
 let OrderModule = class OrderModule {
 };
