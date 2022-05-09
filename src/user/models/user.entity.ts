@@ -13,9 +13,6 @@ export class User{
     lastname: string;
 
     @Column({nullable:true})
-    image: string;
-
-    @Column({nullable:true})
     address: string;
 
     @Column({unique: true})
