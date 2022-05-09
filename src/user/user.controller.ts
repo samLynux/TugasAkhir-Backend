@@ -1,11 +1,7 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
-import { User } from './models/user.entity';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
-import * as bcrypt from 'bcryptjs';
-import { UserCreateDTO } from 'src/auth/models/user-create.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UserUpdateDTO } from 'src/auth/models/user-update.dto';
-import { PaginatedResult } from 'src/common/paginate-result.interface';
 import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express';
 import { UserPreferencesService } from './user-preferences.service';
@@ -38,17 +34,7 @@ export class UserController {
         return this.userService.findOne(id);
     }
 
-    @Post()
-    async create(@Body() body: UserCreateDTO): Promise<User>{
-        const password = await bcrypt.hash('1234',12)
 
-        const { ...data} = body;
-
-        return this.userService.create({
-            ...data,
-            password,
-        });
-    }
 
     @Get('me')
     async getPrefs(@Req() request: Request,){
@@ -71,9 +57,6 @@ export class UserController {
                 "favourites.primaryColor", 
                 "favourites.secondaryColor"]
         );
-
-        // console.log(favourites.favourites);
-        
 
         return favourites.favourites
     }
@@ -100,20 +83,7 @@ export class UserController {
             {user: id}, 
             ["user",  "brands", "colors", "size"]
         );
-        // if(!userPref){
-        //     await this.userPrefService.create({
-        //         colors: colors ? (await this.userPrefService.findColors(colors)) : [],
-        //         size: size ? await this.userPrefService.findSize(size) : [],
-        //         brands: brands ? await this.userPrefService.findBrands(brands) : [],
-        //         gender: gender ? gender: Gender.n,
-        //         user: id
-        //     });
-        //     return this.userPrefService.findOne(
-        //         {user: id}, 
-        //         ["user",  "brands", "colors", "size"]
-        //     );
-        // }  
-         
+
         const newPrefs: UserPreference = {
             ...userPref,
             colors: colors ? (await this.userPrefService.findColors(colors)) : [],
@@ -164,10 +134,10 @@ export class UserController {
     }
 
 
-    @Delete(':id')
-    async delete(@Param('id') id : number){
-        return this.userService.delete(id);
-    }
+    // @Delete(':id')
+    // async delete(@Param('id') id : number){
+    //     return this.userService.delete(id);
+    // }
 
     @Get('foruser')
     async forUser(@Req() request: Request,){

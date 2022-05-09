@@ -23,10 +23,6 @@ let ProductService = class ProductService extends abstract_service_1.AbstractSer
         super(productRepository);
         this.productRepository = productRepository;
     }
-    async find(ids) {
-        return this.productRepository.createQueryBuilder()
-            .where("id IN (:...ids)", { id: ids });
-    }
 };
 ProductService = __decorate([
     (0, common_1.Injectable)(),

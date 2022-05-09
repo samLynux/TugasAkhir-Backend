@@ -12,11 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductCreateDTO = void 0;
 const class_validator_1 = require("class-validator");
 const typeorm_1 = require("typeorm");
-let ProductCreateDTO = class ProductCreateDTO {
-    constructor() {
-        this.image = "http://localhost:3000/api/default_image/default_product.png";
-    }
-};
+class ProductCreateDTO {
+}
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
@@ -33,8 +30,5 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], ProductCreateDTO.prototype, "price", void 0);
-ProductCreateDTO = __decorate([
-    (0, typeorm_1.Entity)('products')
-], ProductCreateDTO);
 exports.ProductCreateDTO = ProductCreateDTO;
 //# sourceMappingURL=product-create.dto.js.map

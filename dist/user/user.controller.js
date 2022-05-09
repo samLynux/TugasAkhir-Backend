@@ -26,8 +26,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
-const bcrypt = require("bcryptjs");
-const user_create_dto_1 = require("../auth/models/user-create.dto");
 const auth_guard_1 = require("../auth/auth.guard");
 const user_update_dto_1 = require("../auth/models/user-update.dto");
 const auth_service_1 = require("../auth/auth.service");
@@ -42,11 +40,6 @@ let UserController = class UserController {
     async userGet(request) {
         const id = await this.authService.userId(request);
         return this.userService.findOne(id);
-    }
-    async create(body) {
-        const password = await bcrypt.hash('1234', 12);
-        const data = __rest(body, []);
-        return this.userService.create(Object.assign(Object.assign({}, data), { password }));
     }
     async getPrefs(request) {
         const id = await this.authService.userId(request);
@@ -87,9 +80,6 @@ let UserController = class UserController {
         }
         return this.userPrefService.removeFav(id, product_id);
     }
-    async delete(id) {
-        return this.userService.delete(id);
-    }
     async forUser(request) {
         const id = await this.authService.userId(request);
         return this.userPrefService.forUser(id);
@@ -102,13 +92,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "userGet", null);
-__decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_create_dto_1.UserCreateDTO]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)('me'),
     __param(0, (0, common_1.Req)()),
@@ -155,13 +138,6 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "addFav", null);
-__decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "delete", null);
 __decorate([
     (0, common_1.Get)('foruser'),
     __param(0, (0, common_1.Req)()),

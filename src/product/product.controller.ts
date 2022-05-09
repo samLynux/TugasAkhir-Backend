@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+
 import { ProductCreateDTO } from './models/product-create.dto';
 import { ProductUpdateDTO } from './models/product-update.dto';
 import { Gender } from './models/product.entity';
@@ -77,7 +77,6 @@ export class ProductController {
     }
 
     @Post()
-    @UsePipes(new ValidationPipe({ transform: true }))
     async create(
         @Body("body") body: ProductCreateDTO,
         @Body("sizes") ids: number[]= [1,2,3]

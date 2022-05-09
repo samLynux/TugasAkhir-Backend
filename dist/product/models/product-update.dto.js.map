@@ -1,1 +1,1 @@
-{"version":3,"file":"product-update.dto.js","sourceRoot":"","sources":["../../../src/product/models/product-update.dto.ts"],"names":[],"mappings":";;;;;;;;;AAAA,qCAAkC;AAIlC,IAAa,gBAAgB,GAA7B,MAAa,gBAAgB;CAY5B,CAAA;AAZY,gBAAgB;IAD5B,IAAA,gBAAM,EAAC,UAAU,CAAC;GACN,gBAAgB,CAY5B;AAZY,4CAAgB"}
+{"version":3,"file":"product-update.dto.js","sourceRoot":"","sources":["../../../src/product/models/product-update.dto.ts"],"names":[],"mappings":";;;AAGA,MAAa,gBAAgB;CAY5B;AAZD,4CAYC"}

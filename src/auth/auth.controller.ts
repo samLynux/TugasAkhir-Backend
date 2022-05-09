@@ -4,10 +4,8 @@ import * as bcrypt from 'bcryptjs';
 import { RegisterDTO } from './models/register.dto';
 
 import { JwtService } from '@nestjs/jwt';
-import {Request,  Response } from 'express';
+import {  Response } from 'express';
 import { AuthGuard } from './auth.guard';
-import { AuthService } from './auth.service';
-
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller()
 export class AuthController {
@@ -15,7 +13,6 @@ export class AuthController {
     constructor(
         private userService: UserService,
         private jwtService: JwtService,
-        private authService: AuthService
         ){
 
     }
@@ -28,9 +25,6 @@ export class AuthController {
             body.email,
             hashed,
         );
-
-        
-
         return "user registered"
     }
 
@@ -58,13 +52,13 @@ export class AuthController {
        return user;
     }
 
-    @UseGuards(AuthGuard)
-    @Get('user')
-    async user(@Req() request: Request){
-        const id = await this.authService.userId(request);
+    // @UseGuards(AuthGuard)
+    // @Get('user')
+    // async user(@Req() request: Request){
+    //     const id = await this.authService.userId(request);
 
-        return this.userService.findOne({id});
-    }
+    //     return this.userService.findOne({id});
+    // }
 
     @UseGuards(AuthGuard)
     @Post('logout')
@@ -92,9 +86,9 @@ export class AuthController {
     }
 
 
-    @Get('test')
-    async test(){
+    // @Get('test')
+    // async test(){
 
-        return "ok";
-    }
+    //     return "ok";
+    // }
 }

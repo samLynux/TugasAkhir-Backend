@@ -1,10 +1,8 @@
-import { Exclude } from "class-transformer";
 import { Brand } from "src/common/models/brand.entity";
-import { Category } from "src/common/models/category.entity";
 import { Color } from "src/common/models/color.entity";
 import { Size } from "src/common/models/size.entity";
 import { Product } from "src/product/models/product.entity";
-import { Column, Entity, JoinColumn,  JoinTable,  ManyToMany,  ManyToOne,  OneToMany,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn,  JoinTable,  ManyToMany,  ManyToOne,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 
 export enum Gender {

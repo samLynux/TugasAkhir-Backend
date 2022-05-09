@@ -19,12 +19,10 @@ const bcrypt = require("bcryptjs");
 const register_dto_1 = require("./models/register.dto");
 const jwt_1 = require("@nestjs/jwt");
 const auth_guard_1 = require("./auth.guard");
-const auth_service_1 = require("./auth.service");
 let AuthController = class AuthController {
-    constructor(userService, jwtService, authService) {
+    constructor(userService, jwtService) {
         this.userService = userService;
         this.jwtService = jwtService;
-        this.authService = authService;
     }
     async register(body) {
         const hashed = await bcrypt.hash(body.password, 12);
@@ -43,10 +41,6 @@ let AuthController = class AuthController {
         response.cookie('jwt', jwt, { httpOnly: true });
         return user;
     }
-    async user(request) {
-        const id = await this.authService.userId(request);
-        return this.userService.findOne({ id });
-    }
     async logout(response) {
         response.clearCookie('jwt');
         return {
@@ -59,9 +53,6 @@ let AuthController = class AuthController {
             password: hashed
         });
         return this.userService.findOne({ email });
-    }
-    async test() {
-        return "ok";
     }
 };
 __decorate([
@@ -82,14 +73,6 @@ __decorate([
 ], AuthController.prototype, "login", null);
 __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
-    (0, common_1.Get)('user'),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "user", null);
-__decorate([
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)('logout'),
     __param(0, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
@@ -104,18 +87,11 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "updatePassword", null);
-__decorate([
-    (0, common_1.Get)('test'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "test", null);
 AuthController = __decorate([
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [user_service_1.UserService,
-        jwt_1.JwtService,
-        auth_service_1.AuthService])
+        jwt_1.JwtService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map

@@ -5,7 +5,6 @@ import { Brand } from 'src/common/models/brand.entity';
 import { Category } from 'src/common/models/category.entity';
 import { Color } from 'src/common/models/color.entity';
 import { Size } from 'src/common/models/size.entity';
-import { Product } from 'src/product/models/product.entity';
 import { ProductService } from 'src/product/product.service';
 import { Repository } from 'typeorm';
 import { Gender, UserPreference } from './models/user-preferences.entity';
@@ -27,28 +26,21 @@ export class UserPreferencesService extends AbstractService{
 
     async findColors(name: string[]){
         const data = await this.colorRepository.find()
-
         return data.filter(d => name.includes(d.value))
     }
 
     async findCategories(name: string[]){
         const data = await this.categoryRepository.find()
-
         return data.filter(d => name.includes(d.value))
     }
 
     async findBrands(name: string[]){
         const data = await this.brandRepository.find()
-
         return data.filter(d => name.includes(d.value))
-
-        
     }
 
     async findSize(name: string){
         return this.sizeRepository.findOne({value: name})
-        
-
     }
 
     async checkFav(id: number,product_id: number){
@@ -92,10 +84,6 @@ export class UserPreferencesService extends AbstractService{
         const prefs = await this.findOne({user: id}, ["favourites"]);
         const product = await this.productService.findOne({id:product_id});
         let favourites: any = prefs.favourites
-        
-        
-        
-        
         let newPrefs = new UserPreference()
         newPrefs = {
             ...prefs,

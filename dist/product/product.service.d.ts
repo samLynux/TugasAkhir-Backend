@@ -4,5 +4,4 @@ import { Product } from './models/product.entity';
 export declare class ProductService extends AbstractService {
     private readonly productRepository;
     constructor(productRepository: Repository<Product>);
-    find(ids: number[]): Promise<any>;
 }

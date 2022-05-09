@@ -1,7 +1,6 @@
-import {  Entity } from "typeorm";
 import { Gender } from "./product.entity";
 
-@Entity('products')
+
 export class ProductUpdateDTO{
     title?: string;
     description?:string;
